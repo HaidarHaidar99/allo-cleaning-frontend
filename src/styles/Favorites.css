@@ -1,0 +1,87 @@
+/* Favorites Page Styling */
+
+.favorites-page {
+  padding-top: 20px;
+  min-height: 80vh;
+}
+
+.favorites-header {
+  margin-bottom: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.favorites-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #fee2e2; /* light red/rose */
+  color: #ef4444;            /* heart color */
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.favorites-tag svg {
+  color: #ef4444;
+}
+
+.favorites-header h1 {
+  font-size: 2.8rem;
+  color: var(--primary-dark);
+}
+
+.favorites-header p {
+  font-size: 1.1rem;
+  color: var(--text-light);
+  max-width: 700px;
+  line-height: 1.6;
+}
+
+/* Empty favorites box */
+.no-favorites-box {
+  padding: 60px 40px;
+  background-color: var(--bg-white);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  max-width: 600px;
+  margin: 40px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.heart-icon-wrapper {
+  width: 90px;
+  height: 90px;
+  border-radius: var(--radius-full);
+  background-color: var(--bg-light);
+  border: 2px dashed var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+}
+
+.no-favorites-box h3 {
+  font-size: 1.5rem;
+  color: var(--primary-dark);
+}
+
+.no-favorites-box p {
+  color: var(--text-light);
+  font-size: 0.95rem;
+  margin-bottom: 10px;
+  max-width: 350px;
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .favorites-header h1 {
+    font-size: 2.2rem;
+  }
+}

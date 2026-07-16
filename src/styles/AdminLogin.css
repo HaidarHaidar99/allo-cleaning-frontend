@@ -1,0 +1,148 @@
+/* Admin Login Page Styling */
+
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 85vh;
+  padding: 20px;
+}
+
+.login-container {
+  width: 100%;
+  max-width: 480px;
+  background-color: var(--bg-white);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 40px;
+}
+
+.login-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+  margin-bottom: 30px;
+}
+
+.login-icon-wrapper {
+  width: 54px;
+  height: 54px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-md);
+}
+
+.login-header h1 {
+  font-size: 1.8rem;
+  color: var(--primary-dark);
+  font-family: 'Outfit', sans-serif;
+}
+
+.login-header p {
+  font-size: 0.9rem;
+  color: var(--text-light);
+  line-height: 1.4;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Input icons styling */
+.input-with-icon {
+  position: relative;
+  width: 100%;
+}
+
+.input-icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-light);
+}
+
+.input-with-icon .form-control {
+  padding-left: 48px;
+}
+
+.text-center-input {
+  text-align: center;
+  letter-spacing: 4px;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.login-btn {
+  width: 100%;
+  padding: 14px;
+  margin-top: 10px;
+}
+
+.login-tip {
+  font-size: 0.8rem;
+  color: var(--text-light);
+  line-height: 1.4;
+}
+
+/* 2FA view info elements */
+.verification-code-intro {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+}
+
+.verification-code-intro p {
+  font-size: 0.95rem;
+  color: var(--text-medium);
+  line-height: 1.5;
+}
+
+.timer-count {
+  font-size: 0.85rem !important;
+  color: var(--text-light) !important;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.resend-wrapper {
+  margin-top: 15px;
+}
+
+.resend-btn {
+  background: transparent;
+  color: var(--text-light);
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: var(--transition-fast);
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+}
+
+.resend-btn:hover {
+  color: var(--accent-cyan-hover);
+  background-color: var(--bg-light);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin {
+  animation: spin 1.2s linear infinite;
+}

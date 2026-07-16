@@ -1,0 +1,217 @@
+import React, { useState } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useCart } from '../context/CartContext';
+import { useFavorites } from '../context/FavoritesContext';
+import { useAdminAuth } from '../context/AdminAuthContext';
+import { Sparkles, Heart, ShoppingCart, User, LogOut, Menu, X, Search } from 'lucide-react';
+import '../styles/Navbar.css';
+
+const getAvatarColor = (email) => {
+  if (!email) return '#10b981';
+  let hash = 0;
+  for (let i = 0; i < email.length; i++) {
+    hash = email.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const colors = [
+    '#ef4444', '#f97316', '#f59e0b', '#10b981', '#14b8a6',
+    '#3b82f6', '#6366f1', '#8b5cf6', '#d946ef', '#ec4899'
+  ];
+  return colors[Math.abs(hash) % colors.length];
+};
+
+const Navbar = () => {
+  const { cart } = useCart();
+  const { favorites } = useFavorites();
+  const { admin, logout } = useAdminAuth();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [showMobileSearch, setShowMobileSearch] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
+
+  const closeMobileMenu = () => {
+    setMobileMenuOpen(false);
+  };
+
+  const handleLogout = () => {
+    logout();
+    closeMobileMenu();
+    navigate('/');
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/services?search=${encodeURIComponent(searchQuery.trim())}`);
+      setShowMobileSearch(false);
+    }
+  };
+
+  const isActive = (path) => {
+    return location.pathname === path ? 'active' : '';
+  };
+
+  const handleNavClick = (sectionId, e) => {
+    closeMobileMenu();
+    if (location.pathname === '/') {
+      e.preventDefault();
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  };
+
+  return (
+    <nav className="navbar glass-card">
+      <div className="navbar-container container">
+        {/* Left: Hamburger (Mobile) or Logo (Desktop) */}
+        <div className="nav-left">
+          <div className="navbar-hamburger" onClick={toggleMobileMenu}>
+            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </div>
+          
+          <Link to="/" className="navbar-logo logo-desktop" onClick={closeMobileMenu}>
+            <img src="/images/icone.jpg" alt="Allo Cleaning Logo" className="logo-image" />
+          </Link>
+        </div>
+
+        {/* Center: Search (Desktop) or Logo (Mobile) */}
+        <div className="nav-center">
+          <form onSubmit={handleSearchSubmit} className="search-bar-desktop">
+            <input 
+              type="text" 
+              placeholder="Search services..." 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="search-input"
+            />
+            <button type="submit" className="search-btn">
+              <Search size={18} />
+            </button>
+          </form>
+
+          <Link to="/" className="navbar-logo logo-mobile" onClick={closeMobileMenu}>
+            <img src="/images/icone.jpg" alt="Allo Cleaning Logo" className="logo-image" />
+          </Link>
+        </div>
+
+        {/* Right: Menu links (Desktop) or Action Icons (Mobile) */}
+        <div className="nav-right">
+          <ul className={`navbar-links ${mobileMenuOpen ? 'mobile-open' : ''}`}>
+            <li>
+              <Link to="/" className={isActive('/')} onClick={closeMobileMenu}>Home</Link>
+            </li>
+            <li>
+              <Link 
+                to="/#services-section" 
+                className={location.hash === '#services-section' ? 'active' : ''}
+                onClick={(e) => handleNavClick('services-section', e)}
+              >
+                Services
+              </Link>
+            </li>
+            <li>
+              <Link to="/favorites" className={`nav-text-link ${isActive('/favorites')}`} onClick={closeMobileMenu}>
+                <span>Favorites</span>
+                {favorites.length > 0 && <span className="text-badge bg-green">{favorites.length}</span>}
+              </Link>
+            </li>
+            <li>
+              <Link to="/cart" className={`nav-text-link ${isActive('/cart')}`} onClick={closeMobileMenu}>
+                <span>Cart</span>
+                {cart.length > 0 && <span className="text-badge bg-cyan">{cart.length}</span>}
+              </Link>
+            </li>
+            <li>
+              <Link 
+                to="/#contact-section" 
+                className={location.hash === '#contact-section' ? 'active' : ''}
+                onClick={(e) => handleNavClick('contact-section', e)}
+              >
+                Contact Us
+              </Link>
+            </li>
+
+            {/* Admin Session Control */}
+            {admin && (
+              <>
+                <li className="admin-nav-item">
+                  <Link to="/admin/dashboard" className={`admin-link-btn ${isActive('/admin/dashboard')}`} onClick={closeMobileMenu} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div 
+                      style={{
+                        backgroundColor: getAvatarColor(admin.email),
+                        width: '24px',
+                        height: '24px',
+                        borderRadius: '50%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: '#fff',
+                        fontWeight: 'bold',
+                        fontSize: '0.75rem',
+                        flexShrink: 0
+                      }}
+                    >
+                      {admin.fullName ? admin.fullName.charAt(0).toUpperCase() : 'A'}
+                    </div>
+                    <span>Admin Panel</span>
+                  </Link>
+                </li>
+                <li>
+                  <button className="logout-btn" onClick={handleLogout}>
+                    <LogOut size={16} />
+                    <span>Logout</span>
+                  </button>
+                </li>
+              </>
+            )}
+          </ul>
+
+          {/* Mobile Quick Action Icons */}
+          <div className="mobile-action-icons">
+            <button className="mobile-action-btn search-toggle" onClick={() => setShowMobileSearch(!showMobileSearch)}>
+              <Search size={20} />
+            </button>
+            <Link to="/favorites" className="mobile-action-btn favorite-btn-mobile" onClick={closeMobileMenu}>
+              <Heart size={20} />
+              {favorites.length > 0 && <span className="mobile-badge bg-green">{favorites.length}</span>}
+            </Link>
+            <Link to="/cart" className="mobile-action-btn cart-btn-mobile" onClick={closeMobileMenu}>
+              <ShoppingCart size={20} />
+              {cart.length > 0 && <span className="mobile-badge bg-cyan">{cart.length}</span>}
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile Search Overlay Bar */}
+      {showMobileSearch && (
+        <div className="mobile-search-overlay animate-fade-in">
+          <form onSubmit={handleSearchSubmit} className="mobile-search-form">
+            <input 
+              type="text" 
+              placeholder="Search services..." 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="mobile-search-input"
+              autoFocus
+            />
+            <button type="submit" className="mobile-search-submit">
+              <Search size={18} />
+            </button>
+            <button type="button" className="mobile-search-close" onClick={() => setShowMobileSearch(false)}>
+              <X size={18} />
+            </button>
+          </form>
+        </div>
+      )}
+    </nav>
+  );
+};
+
+export default Navbar;
