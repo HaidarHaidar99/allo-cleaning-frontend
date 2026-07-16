@@ -3,9 +3,12 @@ import { Link } from 'react-router-dom';
 import { Sparkles, Shield, Compass, CheckCircle, ArrowRight, Award, Smile } from 'lucide-react';
 import Services from './Services';
 import Contact from './Contact';
+import { useSettings } from '../context/SettingsContext';
 import '../styles/Home.css';
 
 const Home = () => {
+  const { settings } = useSettings();
+
   return (
     <div className="home-page animate-fade-in">
       {/* 1. Hero Section */}
@@ -14,12 +17,10 @@ const Home = () => {
           <div className="hero-content">
             <div className="hero-tag">
               <Sparkles size={16} className="text-cyan animate-pulse" />
-              <span>Sparkling Clean, Guaranteed</span>
+              <span>{settings.heroTag}</span>
             </div>
-            <h1>Professional Cleaning Services for Home & Office</h1>
-            <p>
-              Experience the joy of a spotless environment. We deliver top-tier, reliable, and eco-friendly cleaning services tailored to your exact needs.
-            </p>
+            <h1>{settings.heroTitle}</h1>
+            <p>{settings.heroDescription}</p>
             <div className="hero-actions">
               <a href="#services-section" className="btn btn-primary">
                 <span>Explore Services</span>
@@ -46,23 +47,23 @@ const Home = () => {
         <div className="stats-container container">
           <div className="stat-card glass-card">
             <Smile size={36} className="text-cyan" />
-            <div className="stat-number">5,000+</div>
-            <div className="stat-label">Happy Customers</div>
+            <div className="stat-number">{settings.stat1Number}</div>
+            <div className="stat-label">{settings.stat1Label}</div>
           </div>
           <div className="stat-card glass-card">
             <CheckCircle size={36} className="text-green" />
-            <div className="stat-number">12,000+</div>
-            <div className="stat-label">Completed Jobs</div>
+            <div className="stat-number">{settings.stat2Number}</div>
+            <div className="stat-label">{settings.stat2Label}</div>
           </div>
           <div className="stat-card glass-card">
             <Shield size={36} className="text-cyan" />
-            <div className="stat-number">150+</div>
-            <div className="stat-label">Vetted Cleaners</div>
+            <div className="stat-number">{settings.stat3Number}</div>
+            <div className="stat-label">{settings.stat3Label}</div>
           </div>
           <div className="stat-card glass-card">
             <Award size={36} className="text-green" />
-            <div className="stat-number">100%</div>
-            <div className="stat-label">Satisfaction Rate</div>
+            <div className="stat-number">{settings.stat4Number}</div>
+            <div className="stat-label">{settings.stat4Label}</div>
           </div>
         </div>
       </section>

@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { Sparkles, Phone, Mail, MapPin, Send, MessageSquare, Check } from 'lucide-react';
+import { useSettings } from '../context/SettingsContext';
 import { API_BASE_URL } from '../config';
 import '../styles/Contact.css';
 
 const Contact = () => {
+  const { settings } = useSettings();
+
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -67,8 +70,8 @@ const Contact = () => {
           <MessageSquare size={16} className="text-cyan animate-pulse" />
           <span>Get In Touch</span>
         </div>
-        <h1>Contact Our Support Team</h1>
-        <p>Have questions about our packages or need a custom cleanup quote? Leave us a message below, and our team will reach out shortly!</p>
+        <h1>{settings.contactTitle}</h1>
+        <p>{settings.contactDescription}</p>
       </div>
 
       <div className="contact-layout">
@@ -167,7 +170,7 @@ const Contact = () => {
               </div>
               <div className="info-text">
                 <h4>Call Us</h4>
-                <p>+1 (555) 019-2834</p>
+                <p>{settings.phone}</p>
                 <span className="info-sub">Toll-free, Mon-Sat</span>
               </div>
             </div>
@@ -178,7 +181,7 @@ const Contact = () => {
               </div>
               <div className="info-text">
                 <h4>Email Support</h4>
-                <p>info@allocleaning.com</p>
+                <p>{settings.email}</p>
                 <span className="info-sub">Response within 24h</span>
               </div>
             </div>
@@ -189,7 +192,7 @@ const Contact = () => {
               </div>
               <div className="info-text">
                 <h4>Visit Office</h4>
-                <p>123 Sparkle Way, Clean City</p>
+                <p>{settings.address}</p>
                 <span className="info-sub">Floor 2, Clean Building</span>
               </div>
             </div>

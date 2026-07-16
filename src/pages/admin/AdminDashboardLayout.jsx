@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useLocation, Outlet } from 'react-router-dom';
 import { useAdminAuth } from '../../context/AdminAuthContext';
-import { LayoutDashboard, Sparkles, Inbox, Users, LogOut, UserCheck } from 'lucide-react';
+import { LayoutDashboard, Sparkles, Inbox, Users, LogOut, UserCheck, Settings, Menu, X } from 'lucide-react';
 import { API_BASE_URL } from '../../config';
 import '../../styles/AdminDashboard.css';
 
@@ -22,6 +22,7 @@ const AdminDashboardLayout = () => {
   const { token, admin, logout } = useAdminAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   // Route security check: redirect if not authenticated or user deleted
   useEffect(() => {
@@ -45,6 +46,11 @@ const AdminDashboardLayout = () => {
       .catch((err) => console.error('Auth check error:', err));
   }, [token, navigate, location.pathname, logout]);
 
+  // Close mobile sidebar on route change
+  useEffect(() => {
+    setMobileSidebarOpen(false);
+  }, [location.pathname]);
+
   if (!token || !admin) {
     return (
       <div className="admin-loading">
@@ -64,15 +70,55 @@ const AdminDashboardLayout = () => {
   };
 
   return (
-    <div className="admin-dashboard">
-      {/* 1. Sidebar Navigation */}
-      <aside className="admin-sidebar glass-card">
+    <div className={`admin-dashboard ${mobileSidebarOpen ? 'sidebar-open' : ''}`}>
+      
+      {/* Mobile Top Header Toggle Bar */}
+      <div className="admin-mobile-top-bar glass-card">
+        <button 
+          className="sidebar-toggle-btn"
+          onClick={() => setMobileSidebarOpen(!mobileSidebarOpen)}
+          aria-label="Toggle Sidebar"
+        >
+          {mobileSidebarOpen ? <X size={22} /> : <Menu size={22} />}
+        </button>
+        <Link to="/" className="sidebar-logo">
+          <Sparkles className="logo-icon text-cyan" size={18} />
+          <span>Allo Admin</span>
+        </Link>
+        <div 
+          className="mobile-avatar"
+          style={{
+            backgroundColor: getAvatarColor(admin.email),
+            width: '32px',
+            height: '32px',
+            borderRadius: '50%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: '#fff',
+            fontWeight: 'bold',
+            fontSize: '0.9rem'
+          }}
+        >
+          {admin.fullName ? admin.fullName.charAt(0).toUpperCase() : 'A'}
+        </div>
+      </div>
+
+      {/* 1. Sidebar Navigation (drawer on mobile) */}
+      <aside className={`admin-sidebar glass-card ${mobileSidebarOpen ? 'mobile-visible' : ''}`}>
         <div className="sidebar-logo-section">
           <Link to="/" className="sidebar-logo">
             <Sparkles className="logo-icon text-cyan" />
             <span>Allo Admin</span>
           </Link>
           <span className="admin-badge">Admin Panel</span>
+          
+          <button 
+            className="sidebar-close-btn"
+            onClick={() => setMobileSidebarOpen(false)}
+          >
+            <X size={18} />
+          </button>
         </div>
 
         <nav className="sidebar-nav">
@@ -104,6 +150,12 @@ const AdminDashboardLayout = () => {
               </li>
             )}
             <li>
+              <Link to="/admin/dashboard/settings" className={isTabActive('/admin/dashboard/settings')}>
+                <Settings size={18} />
+                <span>Settings</span>
+              </Link>
+            </li>
+            <li>
               <Link to="/admin/dashboard/profile" className={isTabActive('/admin/dashboard/profile')}>
                 <UserCheck size={18} />
                 <span>Profile</span>
@@ -119,6 +171,14 @@ const AdminDashboardLayout = () => {
           </button>
         </div>
       </aside>
+
+      {/* Sidebar Overlay (Mobile only) */}
+      {mobileSidebarOpen && (
+        <div 
+          className="sidebar-overlay"
+          onClick={() => setMobileSidebarOpen(false)}
+        ></div>
+      )}
 
       {/* 2. Main Viewport Content */}
       <main className="admin-viewport">
