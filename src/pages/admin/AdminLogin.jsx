@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAdminAuth } from '../../context/AdminAuthContext';
-import { Lock, Mail, KeyRound, ArrowRight, AlertCircle, Eye, EyeOff, Sun, Moon } from 'lucide-react';
+import { AlertCircle, Eye, EyeOff } from 'lucide-react';
 import '../../styles/AdminLogin.css';
 
 const AdminLogin = () => {
@@ -13,13 +13,6 @@ const AdminLogin = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [theme, setTheme] = useState(() => localStorage.getItem('allo_admin_theme') || 'light');
-
-  const toggleTheme = () => {
-    const newTheme = theme === 'light' ? 'dark' : 'light';
-    setTheme(newTheme);
-    localStorage.setItem('allo_admin_theme', newTheme);
-  };
 
   // Redirect to dashboard if already authenticated
   useEffect(() => {
@@ -48,41 +41,11 @@ const AdminLogin = () => {
   };
 
   return (
-    <div className={`login-page admin-theme-${theme}`}>
-      {/* Theme Toggle Button */}
-      <div style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 100 }}>
-        <button 
-          type="button"
-          onClick={toggleTheme} 
-          className="theme-toggle-btn"
-          style={{
-            background: 'transparent',
-            border: 'none',
-            color: 'var(--admin-text-medium)',
-            cursor: 'pointer',
-            padding: '10px',
-            borderRadius: '50%',
-            backgroundColor: 'var(--admin-card-bg)',
-            boxShadow: 'var(--admin-shadow)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            border: '1px solid var(--admin-border)'
-          }}
-          title={`Switch to ${theme === 'light' ? 'Dark' : 'Light'} Mode`}
-        >
-          {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
-        </button>
-      </div>
-
+    <div className="login-page">
       <div className="login-container glass-card animate-fade-in">
         {/* Header */}
         <div className="login-header">
-          <div className="login-icon-wrapper bg-cyan">
-            <Lock className="text-white" size={24} />
-          </div>
-          <h1>Admin Portal</h1>
-          <p>Please authorize access to the Allo Cleaning management dashboard.</p>
+          <h1><strong>Login</strong> to continue</h1>
         </div>
 
         {/* Error alerts */}
@@ -96,24 +59,20 @@ const AdminLogin = () => {
         <form onSubmit={handleSubmit} className="login-form">
           <div className="form-group">
             <label htmlFor="email">Email Address</label>
-            <div className="input-with-icon">
-              <Mail className="input-icon" size={18} />
-              <input
-                type="email"
-                id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="form-control"
-                placeholder="Email Address"
-                required
-              />
-            </div>
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="form-control"
+              placeholder="Email Address"
+              required
+            />
           </div>
 
           <div className="form-group">
             <label htmlFor="password">Password</label>
-            <div className="input-with-icon" style={{ position: 'relative' }}>
-              <KeyRound className="input-icon" size={18} />
+            <div style={{ position: 'relative' }}>
               <input
                 type={showPassword ? 'text' : 'password'}
                 id="password"
@@ -137,7 +96,7 @@ const AdminLogin = () => {
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
-                  color: 'var(--text-light)',
+                  color: 'var(--admin-text-light)',
                   padding: 0
                 }}
               >
@@ -147,8 +106,11 @@ const AdminLogin = () => {
           </div>
 
           <button type="submit" className="btn btn-primary login-btn" disabled={loading}>
-            <span>{loading ? 'Authenticating...' : 'Sign In'}</span>
-            <ArrowRight size={16} />
+            {loading ? (
+              <div className="spinner-loader animate-spin"></div>
+            ) : (
+              <span>Sign In</span>
+            )}
           </button>
         </form>
       </div>

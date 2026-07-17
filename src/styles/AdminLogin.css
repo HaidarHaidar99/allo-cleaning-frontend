@@ -1,9 +1,8 @@
 /* ==========================================
-   ADMIN LOGIN THEME & LAYOUT (BLUE/WHITE & BLACK/BLUE)
+   ADMIN LOGIN THEME & LAYOUT (BLUE & WHITE ONLY)
    ========================================== */
 
-/* Theme variables */
-.admin-theme-light {
+.login-page {
   --admin-bg: #f8fafc;
   --admin-card-bg: #ffffff;
   --admin-text-main: #1e3a8a; /* Deep blue */
@@ -18,26 +17,7 @@
   --admin-alert-bg: #eff6ff;
   --admin-alert-text: #1e40af;
   --admin-alert-border: #bfdbfe;
-}
 
-.admin-theme-dark {
-  --admin-bg: #030712; /* Black */
-  --admin-card-bg: #0b0f19; /* Midnight dark */
-  --admin-text-main: #f9fafb; /* Crisp white */
-  --admin-text-medium: #3b82f6; /* Electric blue */
-  --admin-text-light: #94a3b8;
-  --admin-border: #1e293b; /* Dark blue-grey border */
-  --admin-primary: #3b82f6; /* Electric blue */
-  --admin-primary-hover: #60a5fa;
-  --admin-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(59, 130, 246, 0.15);
-  --admin-input-bg: #030712;
-  --admin-input-border: #1e293b;
-  --admin-alert-bg: rgba(59, 130, 246, 0.1);
-  --admin-alert-text: #60a5fa;
-  --admin-alert-border: rgba(59, 130, 246, 0.25);
-}
-
-.login-page {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -47,21 +27,6 @@
   color: var(--admin-text-main);
   transition: all 0.3s ease;
   position: relative;
-}
-
-/* Add a beautiful grid grid overlay in background */
-.login-page::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  opacity: 0.05;
-  background-image: linear-gradient(var(--admin-text-medium) 1px, transparent 1px),
-                    linear-gradient(90deg, var(--admin-text-medium) 1px, transparent 1px);
-  background-size: 20px 20px;
-  pointer-events: none;
 }
 
 .login-container {
@@ -86,31 +51,16 @@
   margin-bottom: 35px;
 }
 
-.login-icon-wrapper {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--admin-primary);
-  color: #ffffff;
-  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
-  transition: all 0.3s ease;
-}
-
 .login-header h1 {
   font-size: 2rem;
   color: var(--admin-text-main);
   font-family: 'Outfit', sans-serif;
-  font-weight: 800;
+  font-weight: 500;
   margin-top: 5px;
 }
 
-.login-header p {
-  font-size: 0.9rem;
-  color: var(--admin-text-light);
-  line-height: 1.5;
+.login-header h1 strong {
+  font-weight: 800;
 }
 
 .login-form {
@@ -133,24 +83,6 @@
   letter-spacing: 0.5px;
 }
 
-.input-with-icon {
-  position: relative;
-  width: 100%;
-}
-
-.input-icon {
-  position: absolute;
-  left: 16px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--admin-text-medium);
-  transition: all 0.3s ease;
-}
-
-.input-with-icon .form-control {
-  padding-left: 48px;
-}
-
 .form-control {
   width: 100%;
   background: var(--admin-input-bg);
@@ -164,7 +96,7 @@
 
 .form-control:focus {
   border-color: var(--admin-primary);
-  box-shadow: 0 0 0 4px var(--admin-primary-light, rgba(37, 99, 235, 0.15));
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
 }
 
 .form-control::placeholder {
@@ -279,15 +211,29 @@
 }
 
 .resend-btn:hover {
-  background-color: var(--admin-primary-light, rgba(37, 99, 235, 0.05));
+  background-color: rgba(37, 99, 235, 0.05);
   color: var(--admin-primary);
   border-color: var(--admin-primary);
 }
 
-.theme-toggle-btn {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+/* Spinner helper for loading button */
+.spinner-loader {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin-btn 0.8s linear infinite;
 }
 
-.theme-toggle-btn:hover {
-  transform: rotate(15deg) scale(1.1);
+@keyframes spin-btn {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
 }
