@@ -4,67 +4,67 @@
 
 /* Theme Variables Definition */
 .admin-theme-light {
-  --admin-bg: #f8fafc;
+  --admin-bg: #ffffff; /* Normal white back */
   --admin-card-bg: #ffffff;
-  --admin-text-main: #0f172a;
-  --admin-text-medium: #1e3a8a; /* Deep blue */
-  --admin-text-light: #64748b;
-  --admin-border: #e2e8f0;
-  --admin-primary: #2563eb;
+  --admin-text-main: #000000; /* Black texts */
+  --admin-text-medium: #111827;
+  --admin-text-light: #374151;
+  --admin-border: #e5e7eb;
+  --admin-primary: #2563eb; /* Blue tabs and buttons */
   --admin-primary-hover: #1d4ed8;
-  --admin-primary-light: #eff6ff;
+  --admin-primary-light: #dbeafe;
   --admin-sidebar-bg: #1e3a8a;
-  --admin-sidebar-text: #dbeafe;
+  --admin-sidebar-text: #bfdbfe;
   --admin-sidebar-active-bg: #ffffff;
   --admin-sidebar-active-text: #1e3a8a;
   --admin-sidebar-hover-bg: rgba(255, 255, 255, 0.08);
   --admin-sidebar-hover-text: #ffffff;
   --admin-sidebar-logo-text: #ffffff;
-  --admin-shadow-sm: 0 1px 2px rgba(37, 99, 235, 0.04);
-  --admin-shadow: 0 4px 12px rgba(37, 99, 235, 0.05);
-  --admin-shadow-lg: 0 10px 30px rgba(37, 99, 235, 0.08);
+  --admin-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --admin-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  --admin-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
   --admin-header-bg: #ffffff;
-  --admin-table-header-bg: #f1f5f9;
-  --admin-table-row-hover: #f8fafc;
+  --admin-table-header-bg: #f3f4f6;
+  --admin-table-row-hover: #f9fafb;
   --admin-input-bg: #ffffff;
   --admin-input-border: #cbd5e1;
-  --admin-badge-bg: #dbeafe;
+  --admin-badge-bg: #eff6ff;
   --admin-badge-text: #1e40af;
   --admin-badge-border: #bfdbfe;
-  --admin-stats-card-border: #e2e8f0;
-  --admin-panel-header-border: #e2e8f0;
+  --admin-stats-card-border: #e5e7eb;
+  --admin-panel-header-border: #e5e7eb;
 }
 
 .admin-theme-dark {
-  --admin-bg: #030712; /* Black */
-  --admin-card-bg: #0b0f19; /* Midnight dark */
-  --admin-text-main: #f9fafb; /* Crisp white */
-  --admin-text-medium: #3b82f6; /* Electric blue */
-  --admin-text-light: #94a3b8;
-  --admin-border: #1e293b;
-  --admin-primary: #3b82f6;
+  --admin-bg: #000000; /* Back black */
+  --admin-card-bg: #000000; /* Back black card */
+  --admin-text-main: #ffffff; /* Text white */
+  --admin-text-medium: #f3f4f6;
+  --admin-text-light: #9ca3af;
+  --admin-border: #1f2937;
+  --admin-primary: #3b82f6; /* Blue tabs and buttons */
   --admin-primary-hover: #60a5fa;
-  --admin-primary-light: rgba(59, 130, 246, 0.1);
-  --admin-sidebar-bg: #0b0f19;
-  --admin-sidebar-text: #94a3b8;
-  --admin-sidebar-active-bg: #1e293b;
+  --admin-primary-light: rgba(59, 130, 246, 0.15);
+  --admin-sidebar-bg: #000000;
+  --admin-sidebar-text: #9ca3af;
+  --admin-sidebar-active-bg: #1f2937;
   --admin-sidebar-active-text: #3b82f6;
   --admin-sidebar-hover-bg: rgba(255, 255, 255, 0.03);
   --admin-sidebar-hover-text: #ffffff;
-  --admin-sidebar-logo-text: #f9fafb;
+  --admin-sidebar-logo-text: #ffffff;
   --admin-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
   --admin-shadow: 0 4px 15px rgba(0, 0, 0, 0.5), 0 0 10px rgba(59, 130, 246, 0.05);
-  --admin-shadow-lg: 0 10px 35px rgba(0, 0, 0, 0.6), 0 0 20px rgba(59, 130, 246, 0.1);
-  --admin-header-bg: #0b0f19;
+  --admin-shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.9);
+  --admin-header-bg: #000000;
   --admin-table-header-bg: #111827;
   --admin-table-row-hover: #111827;
-  --admin-input-bg: #030712;
-  --admin-input-border: #1e293b;
-  --admin-badge-bg: rgba(59, 130, 246, 0.15);
-  --admin-badge-text: #3b82f6;
-  --admin-badge-border: rgba(59, 130, 246, 0.3);
-  --admin-stats-card-border: #1e293b;
-  --admin-panel-header-border: #1e293b;
+  --admin-input-bg: #000000;
+  --admin-input-border: #1f2937;
+  --admin-badge-bg: rgba(59, 130, 246, 0.2);
+  --admin-badge-text: #60a5fa;
+  --admin-badge-border: rgba(59, 130, 246, 0.4);
+  --admin-stats-card-border: #1f2937;
+  --admin-panel-header-border: #1f2937;
 }
 
 /* Base Dashboard Grid Layout */

@@ -87,8 +87,8 @@ const ManageServices = () => {
     setError('');
     setSuccessMessage('');
 
-    if (!name || !category || !description || !price) {
-      setError('All text fields are required.');
+    if (!name || !category || !description) {
+      setError('Name, category, and description are required.');
       return;
     }
 
@@ -306,7 +306,7 @@ const ManageServices = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="servicePrice">Price ($)</label>
+            <label htmlFor="servicePrice">Price ($) (Optional)</label>
             <input
               type="number"
               id="servicePrice"
@@ -315,7 +315,6 @@ const ManageServices = () => {
               onChange={(e) => setPrice(e.target.value)}
               className="form-control"
               placeholder="Price ($)"
-              required
             />
           </div>
 

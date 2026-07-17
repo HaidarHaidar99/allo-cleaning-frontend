@@ -6,8 +6,10 @@ import { API_BASE_URL } from '../config';
 import '../styles/Services.css';
 
 const Services = () => {
+  const [activeTab, setActiveTab] = useState('services');
   const [services, setServices] = useState([]);
-  const [filteredServices, setFilteredServices] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [filteredItems, setFilteredItems] = useState([]);
   const [categories, setCategories] = useState(['All']);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [sortBy, setSortBy] = useState('default');
@@ -17,39 +19,49 @@ const Services = () => {
   const searchQuery = searchParams.get('search') || '';
 
   useEffect(() => {
-    // Fetch services from the backend API
-    fetch(`${API_BASE_URL}/services`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (Array.isArray(data)) {
-          setServices(data);
-
-          // Dynamically extract categories from services list
-          const uniqueCategories = ['All', ...new Set(data.map(s => s.category))];
-          setCategories(uniqueCategories);
+    setLoading(true);
+    Promise.all([
+      fetch(`${API_BASE_URL}/services`).then((res) => res.json()).catch(() => []),
+      fetch(`${API_BASE_URL}/products`).then((res) => res.json()).catch(() => [])
+    ])
+      .then(([servicesData, productsData]) => {
+        if (Array.isArray(servicesData)) {
+          setServices(servicesData);
+        }
+        if (Array.isArray(productsData)) {
+          setProducts(productsData);
         }
         setLoading(false);
       })
       .catch((err) => {
-        console.error('Error fetching services:', err);
+        console.error('Error fetching catalog data:', err);
         setLoading(false);
       });
   }, []);
 
-  // Apply filtering based on selected category, search query, and sorting
+  // Update categories and reset category selection when tab changes
   useEffect(() => {
-    let filtered = [...services];
+    const currentItems = activeTab === 'services' ? services : products;
+    const uniqueCategories = ['All', ...new Set(currentItems.map((item) => item.category))];
+    setCategories(uniqueCategories);
+    setSelectedCategory('All');
+  }, [activeTab, services, products]);
+
+  // Filter and sort active items
+  useEffect(() => {
+    const currentItems = activeTab === 'services' ? services : products;
+    let filtered = [...currentItems];
 
     if (selectedCategory !== 'All') {
-      filtered = filtered.filter(s => s.category === selectedCategory);
+      filtered = filtered.filter((item) => item.category === selectedCategory);
     }
 
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase().trim();
-      filtered = filtered.filter(s => 
-        s.name.toLowerCase().includes(q) || 
-        s.category.toLowerCase().includes(q) || 
-        (s.description && s.description.toLowerCase().includes(q))
+      filtered = filtered.filter((item) => 
+        item.name.toLowerCase().includes(q) || 
+        item.category.toLowerCase().includes(q) || 
+        (item.description && item.description.toLowerCase().includes(q))
       );
     }
 
@@ -64,8 +76,8 @@ const Services = () => {
       filtered.sort((a, b) => b.name.localeCompare(a.name));
     }
 
-    setFilteredServices(filtered);
-  }, [services, selectedCategory, searchQuery, sortBy]);
+    setFilteredItems(filtered);
+  }, [activeTab, services, products, selectedCategory, searchQuery, sortBy]);
 
   return (
     <div className="services-page container animate-fade-in">
@@ -75,10 +87,54 @@ const Services = () => {
           <Sparkles size={16} className="text-cyan animate-pulse" />
           <span>Our Cleaning Catalog</span>
         </div>
-        <h1>Explore Our Professional Services</h1>
+        <h1>
+          {activeTab === 'services' 
+            ? 'Explore Our Professional Services' 
+            : 'Browse Our Premium Cleaning Products'}
+        </h1>
         <p>
-          Compare prices, browse categories, and select the perfect cleaning solutions. Book instantly or add to your cart to customize your booking.
+          {activeTab === 'services'
+            ? 'Compare prices, browse categories, and select the perfect cleaning solutions. Book instantly or add to your cart to customize your booking.'
+            : 'High-quality, eco-friendly cleaning supplies and equipment recommended by our professionals. Purchase directly or add to your booking.'}
         </p>
+      </div>
+
+      {/* Catalog Selector Tabs */}
+      <div className="catalog-tabs" style={{ display: 'flex', justifyContent: 'center', gap: '15px', marginBottom: '40px' }}>
+        <button 
+          className={`catalog-tab-btn ${activeTab === 'services' ? 'active' : ''}`}
+          onClick={() => setActiveTab('services')}
+          style={{
+            padding: '12px 28px',
+            fontSize: '1rem',
+            fontWeight: '700',
+            borderRadius: '50px',
+            cursor: 'pointer',
+            transition: 'all 0.25s ease',
+            border: activeTab === 'services' ? '2px solid var(--accent-cyan)' : '2px solid var(--border-color)',
+            backgroundColor: activeTab === 'services' ? 'var(--accent-cyan-light, #ecfeff)' : 'transparent',
+            color: activeTab === 'services' ? 'var(--accent-cyan-hover, #0891b2)' : 'var(--text-medium)'
+          }}
+        >
+          Services
+        </button>
+        <button 
+          className={`catalog-tab-btn ${activeTab === 'products' ? 'active' : ''}`}
+          onClick={() => setActiveTab('products')}
+          style={{
+            padding: '12px 28px',
+            fontSize: '1rem',
+            fontWeight: '700',
+            borderRadius: '50px',
+            cursor: 'pointer',
+            transition: 'all 0.25s ease',
+            border: activeTab === 'products' ? '2px solid var(--accent-cyan)' : '2px solid var(--border-color)',
+            backgroundColor: activeTab === 'products' ? 'var(--accent-cyan-light, #ecfeff)' : 'transparent',
+            color: activeTab === 'products' ? 'var(--accent-cyan-hover, #0891b2)' : 'var(--text-medium)'
+          }}
+        >
+          Products
+        </button>
       </div>
 
       {/* Filter and Sort Control Bar */}
@@ -114,21 +170,21 @@ const Services = () => {
         </div>
       </div>
 
-      {/* Services Grid */}
+      {/* Grid Display */}
       {loading ? (
         <div className="loading-spinner-wrapper">
           <div className="spinner"></div>
         </div>
-      ) : filteredServices.length > 0 ? (
+      ) : filteredItems.length > 0 ? (
         <div className="services-grid">
-          {filteredServices.map((service) => (
-            <ServiceCard key={service.id} service={service} />
+          {filteredItems.map((item) => (
+            <ServiceCard key={item.id} service={item} />
           ))}
         </div>
       ) : (
         <div className="no-services-box text-center glass-card">
-          <h3>No Services Found</h3>
-          <p>We couldn't find any services matching the selected category. Try checking another category!</p>
+          <h3>No {activeTab === 'services' ? 'Services' : 'Products'} Found</h3>
+          <p>We couldn't find any {activeTab === 'services' ? 'services' : 'products'} matching the selected criteria. Try resetting filters!</p>
         </div>
       )}
     </div>

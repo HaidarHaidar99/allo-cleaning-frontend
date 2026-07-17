@@ -14,7 +14,8 @@ const ServiceCard = ({ service }) => {
   const { id, name, category, description, price, imageUrl } = service;
 
   // Format price
-  const formattedPrice = parseFloat(price || 0).toFixed(2);
+  const hasPrice = price !== undefined && price !== null && price !== '' && parseFloat(price) > 0;
+  const formattedPrice = hasPrice ? `$${parseFloat(price).toFixed(2)}` : 'Contact Us';
 
   // Helper to resolve images (either relative backend uploads or external URLs)
   const getServiceImage = () => {
@@ -33,7 +34,7 @@ I would like to request the following service:
 
 Service Name: ${name}
 Category: ${category}
-Price: $${formattedPrice}
+Price: ${formattedPrice}
 
 Description:
 ${description}
@@ -90,7 +91,7 @@ Thank you.`;
         <div className="service-footer">
           <div className="service-price">
             <span className="price-label">Price</span>
-            <span className="price-amount">${formattedPrice}</span>
+            <span className="price-amount">{formattedPrice}</span>
           </div>
 
           <div className="service-actions">

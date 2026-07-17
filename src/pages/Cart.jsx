@@ -23,17 +23,21 @@ const Cart = () => {
     
     let servicesListText = '';
     cart.forEach((item, index) => {
+      const hasItemPrice = item.price !== undefined && item.price !== null && item.price !== '' && parseFloat(item.price) > 0;
+      const itemPriceText = hasItemPrice ? `$${parseFloat(item.price).toFixed(2)}` : 'Contact Us';
       servicesListText += `\n${index + 1}. Service Name: ${item.name}
    Category: ${item.category}
-   Price: $${parseFloat(item.price || 0).toFixed(2)}
+   Price: ${itemPriceText}
    Description: ${item.description}\n`;
     });
+
+    const totalText = cartTotal > 0 ? `$${cartTotal.toFixed(2)}` : 'Contact Us / TBD';
 
     const message = `Hello,
 
 I would like to request the following services:
 ${servicesListText}
-Total Price: $${cartTotal.toFixed(2)}
+Total Price: ${totalText}
 
 Thank you.`;
 
@@ -123,7 +127,7 @@ Thank you.`;
               <hr />
               <div className="summary-row total-row">
                 <span>Total Price</span>
-                <span>${cartTotal.toFixed(2)}</span>
+                <span>{cartTotal > 0 ? `$${cartTotal.toFixed(2)}` : 'Contact Us'}</span>
               </div>
             </div>
             

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useLocation, Outlet } from 'react-router-dom';
 import { useAdminAuth } from '../../context/AdminAuthContext';
-import { LayoutDashboard, Sparkles, Inbox, Users, LogOut, UserCheck, Settings, Menu, X, Sun, Moon } from 'lucide-react';
+import { LayoutDashboard, Sparkles, Inbox, Users, LogOut, UserCheck, Settings, Menu, X, Sun, Moon, Package } from 'lucide-react';
 import { API_BASE_URL } from '../../config';
 import '../../styles/AdminDashboard.css';
 
@@ -159,6 +159,12 @@ const AdminDashboardLayout = () => {
               <Link to="/admin/dashboard/services" className={isTabActive('/admin/dashboard/services')}>
                 <Sparkles size={18} />
                 <span>Services</span>
+              </Link>
+            </li>
+            <li>
+              <Link to="/admin/dashboard/products" className={isTabActive('/admin/dashboard/products')}>
+                <Package size={18} />
+                <span>Products</span>
               </Link>
             </li>
             <li>

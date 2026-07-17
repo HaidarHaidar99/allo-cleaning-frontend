@@ -23,6 +23,7 @@ import AdminLogin from './pages/admin/AdminLogin';
 import AdminDashboardLayout from './pages/admin/AdminDashboardLayout';
 import DashboardHome from './pages/admin/DashboardHome';
 import ManageServices from './pages/admin/ManageServices';
+import ManageProducts from './pages/admin/ManageProducts';
 import ManageForms from './pages/admin/ManageForms';
 import ManageAdmins from './pages/admin/ManageAdmins';
 import ManageSettings from './pages/admin/ManageSettings';
@@ -146,6 +147,7 @@ function App() {
                 <Route path="/admin/dashboard" element={<AdminDashboardLayout />}>
                   <Route index element={<DashboardHome />} />
                   <Route path="services" element={<ManageServices />} />
+                  <Route path="products" element={<ManageProducts />} />
                   <Route path="forms" element={<ManageForms />} />
                   <Route path="admins" element={<ManageAdmins />} />
                   <Route path="settings" element={<ManageSettings />} />
