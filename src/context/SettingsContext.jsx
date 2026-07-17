@@ -33,8 +33,13 @@ export const SettingsProvider = ({ children }) => {
     try {
       const response = await fetch(`${API_BASE_URL}/settings`);
       if (response.ok) {
-        const data = await response.json();
-        setSettings((prev) => ({ ...prev, ...data }));
+        const contentType = response.headers.get("content-type");
+        if (contentType && contentType.includes("application/json")) {
+          const data = await response.json();
+          setSettings((prev) => ({ ...prev, ...data }));
+        } else {
+          console.warn('fetchSettings: Server did not return JSON');
+        }
       }
     } catch (error) {
       console.error('Failed to fetch settings:', error);
@@ -62,6 +67,15 @@ export const SettingsProvider = ({ children }) => {
         body: JSON.stringify(formData)
       });
 
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        const text = await response.text();
+        return { 
+          success: false, 
+          error: `Server error (status ${response.status}): ${text.substring(0, 80)}... Please check if backend API server is running.` 
+        };
+      }
+
       const data = await response.json();
 
       if (!response.ok) {
@@ -74,7 +88,7 @@ export const SettingsProvider = ({ children }) => {
       return { success: true };
     } catch (error) {
       console.error('Error updating settings:', error);
-      return { success: false, error: error.message || 'Failed to connect to the server.' };
+      return { success: false, error: `Connection failed: ${error.message}. Please check if backend API server is running on port 5000.` };
     }
   };
 

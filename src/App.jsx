@@ -137,8 +137,10 @@ function App() {
                   <Route path="favorites" element={<Favorites />} />
                   <Route path="cart" element={<Cart />} />
                   <Route path="contact" element={<Contact />} />
-                  <Route path="admin" element={<AdminLogin />} />
                 </Route>
+
+                {/* Admin Login (Completely alone, no customer navbar/footer/whatsapp float) */}
+                <Route path="/admin" element={<AdminLogin />} />
 
                 {/* Admin Dashboard Protected Routes */}
                 <Route path="/admin/dashboard" element={<AdminDashboardLayout />}>

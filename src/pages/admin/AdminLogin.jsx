@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAdminAuth } from '../../context/AdminAuthContext';
-import { Lock, Mail, KeyRound, ArrowRight, AlertCircle, Eye, EyeOff } from 'lucide-react';
+import { Lock, Mail, KeyRound, ArrowRight, AlertCircle, Eye, EyeOff, Sun, Moon } from 'lucide-react';
 import '../../styles/AdminLogin.css';
 
 const AdminLogin = () => {
@@ -13,6 +13,13 @@ const AdminLogin = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [theme, setTheme] = useState(() => localStorage.getItem('allo_admin_theme') || 'light');
+
+  const toggleTheme = () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
+    localStorage.setItem('allo_admin_theme', newTheme);
+  };
 
   // Redirect to dashboard if already authenticated
   useEffect(() => {
@@ -41,7 +48,33 @@ const AdminLogin = () => {
   };
 
   return (
-    <div className="login-page">
+    <div className={`login-page admin-theme-${theme}`}>
+      {/* Theme Toggle Button */}
+      <div style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 100 }}>
+        <button 
+          type="button"
+          onClick={toggleTheme} 
+          className="theme-toggle-btn"
+          style={{
+            background: 'transparent',
+            border: 'none',
+            color: 'var(--admin-text-medium)',
+            cursor: 'pointer',
+            padding: '10px',
+            borderRadius: '50%',
+            backgroundColor: 'var(--admin-card-bg)',
+            boxShadow: 'var(--admin-shadow)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            border: '1px solid var(--admin-border)'
+          }}
+          title={`Switch to ${theme === 'light' ? 'Dark' : 'Light'} Mode`}
+        >
+          {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+        </button>
+      </div>
+
       <div className="login-container glass-card animate-fade-in">
         {/* Header */}
         <div className="login-header">

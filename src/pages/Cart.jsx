@@ -3,10 +3,12 @@ import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { Trash2, ShoppingCart, Send, ArrowRight, ArrowLeft } from 'lucide-react';
 import { ASSET_BASE_URL } from '../config';
+import { useSettings } from '../context/SettingsContext';
 import '../styles/Cart.css';
 
 const Cart = () => {
   const { cart, removeFromCart, cartTotal, clearCart } = useCart();
+  const { settings } = useSettings();
 
   // Helper to resolve images (either relative backend uploads or external URLs)
   const getServiceImage = (imageUrl) => {
@@ -17,7 +19,7 @@ const Cart = () => {
 
   // Cart-wide Checkout "Buy Now" WhatsApp Link Generator
   const handleCheckout = () => {
-    const phoneNumber = '1234567890'; // Replace with your company WhatsApp number
+    const rawWhatsApp = settings.whatsapp || '1234567890';
     
     let servicesListText = '';
     cart.forEach((item, index) => {
@@ -36,7 +38,15 @@ Total Price: $${cartTotal.toFixed(2)}
 Thank you.`;
 
     const encodedMessage = encodeURIComponent(message);
-    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+    
+    let whatsappUrl;
+    if (rawWhatsApp.startsWith('http')) {
+      whatsappUrl = rawWhatsApp.includes('?') ? `${rawWhatsApp}&text=${encodedMessage}` : `${rawWhatsApp}?text=${encodedMessage}`;
+    } else {
+      const cleanNumber = rawWhatsApp.replace(/\D/g, '');
+      whatsappUrl = `https://wa.me/${cleanNumber}?text=${encodedMessage}`;
+    }
+    
     window.open(whatsappUrl, '_blank');
   };
 

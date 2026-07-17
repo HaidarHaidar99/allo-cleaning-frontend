@@ -3,11 +3,13 @@ import { Heart, ShoppingCart, Send } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useFavorites } from '../context/FavoritesContext';
 import { ASSET_BASE_URL } from '../config';
+import { useSettings } from '../context/SettingsContext';
 import '../styles/ServiceCard.css';
 
 const ServiceCard = ({ service }) => {
   const { addToCart, removeFromCart, isInCart } = useCart();
   const { toggleFavorite, isFavorite } = useFavorites();
+  const { settings } = useSettings();
 
   const { id, name, category, description, price, imageUrl } = service;
 
@@ -24,7 +26,7 @@ const ServiceCard = ({ service }) => {
 
   // Single Service "Buy Now" WhatsApp link generator
   const handleBuyNow = () => {
-    const phoneNumber = '1234567890'; // Replace with company WhatsApp number
+    const rawWhatsApp = settings.whatsapp || '1234567890';
     const message = `Hello,
 
 I would like to request the following service:
@@ -39,7 +41,15 @@ ${description}
 Thank you.`;
 
     const encodedMessage = encodeURIComponent(message);
-    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+    
+    let whatsappUrl;
+    if (rawWhatsApp.startsWith('http')) {
+      whatsappUrl = rawWhatsApp.includes('?') ? `${rawWhatsApp}&text=${encodedMessage}` : `${rawWhatsApp}?text=${encodedMessage}`;
+    } else {
+      const cleanNumber = rawWhatsApp.replace(/\D/g, '');
+      whatsappUrl = `https://wa.me/${cleanNumber}?text=${encodedMessage}`;
+    }
+    
     window.open(whatsappUrl, '_blank');
   };
 

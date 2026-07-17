@@ -43,6 +43,12 @@ export const AdminAuthProvider = ({ children }) => {
         body: JSON.stringify({ email, password }),
       });
 
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        const text = await response.text();
+        throw new Error(`Server error (status ${response.status}): ${text.substring(0, 80)}... Please verify the backend API server is running.`);
+      }
+
       const data = await response.json();
 
       if (!response.ok) {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useLocation, Outlet } from 'react-router-dom';
 import { useAdminAuth } from '../../context/AdminAuthContext';
-import { LayoutDashboard, Sparkles, Inbox, Users, LogOut, UserCheck, Settings, Menu, X } from 'lucide-react';
+import { LayoutDashboard, Sparkles, Inbox, Users, LogOut, UserCheck, Settings, Menu, X, Sun, Moon } from 'lucide-react';
 import { API_BASE_URL } from '../../config';
 import '../../styles/AdminDashboard.css';
 
@@ -23,6 +23,13 @@ const AdminDashboardLayout = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  const [theme, setTheme] = useState(() => localStorage.getItem('allo_admin_theme') || 'light');
+
+  const toggleTheme = () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
+    localStorage.setItem('allo_admin_theme', newTheme);
+  };
 
   // Route security check: redirect if not authenticated or user deleted
   useEffect(() => {
@@ -70,7 +77,7 @@ const AdminDashboardLayout = () => {
   };
 
   return (
-    <div className={`admin-dashboard ${mobileSidebarOpen ? 'sidebar-open' : ''}`}>
+    <div className={`admin-dashboard admin-theme-${theme} ${mobileSidebarOpen ? 'sidebar-open' : ''}`}>
       
       {/* Mobile Top Header Toggle Bar */}
       <div className="admin-mobile-top-bar glass-card">
@@ -85,22 +92,41 @@ const AdminDashboardLayout = () => {
           <Sparkles className="logo-icon text-cyan" size={18} />
           <span>Allo Admin</span>
         </Link>
-        <div 
-          className="mobile-avatar"
-          style={{
-            backgroundColor: getAvatarColor(admin.email),
-            width: '32px',
-            height: '32px',
-            borderRadius: '50%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: '#fff',
-            fontWeight: 'bold',
-            fontSize: '0.9rem'
-          }}
-        >
-          {admin.fullName ? admin.fullName.charAt(0).toUpperCase() : 'A'}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <button 
+            onClick={toggleTheme} 
+            className="theme-toggle-btn"
+            style={{
+              background: 'transparent',
+              border: 'none',
+              color: 'var(--admin-text-medium)',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '6px'
+            }}
+            title={`Switch to ${theme === 'light' ? 'Dark' : 'Light'} Mode`}
+          >
+            {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+          </button>
+          <div 
+            className="mobile-avatar"
+            style={{
+              backgroundColor: getAvatarColor(admin.email),
+              width: '32px',
+              height: '32px',
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#fff',
+              fontWeight: 'bold',
+              fontSize: '0.9rem'
+            }}
+          >
+            {admin.fullName ? admin.fullName.charAt(0).toUpperCase() : 'A'}
+          </div>
         </div>
       </div>
 
@@ -189,6 +215,27 @@ const AdminDashboardLayout = () => {
             <p>Role: <strong>{admin.role}</strong></p>
           </div>
           <div className="header-profile">
+            <button 
+              onClick={toggleTheme} 
+              className="theme-toggle-btn"
+              style={{
+                background: 'transparent',
+                border: 'none',
+                color: 'var(--admin-text-medium)',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '8px',
+                borderRadius: '50%',
+                backgroundColor: 'var(--admin-bg)',
+                border: '1px solid var(--admin-border)',
+                marginRight: '12px'
+              }}
+              title={`Switch to ${theme === 'light' ? 'Dark' : 'Light'} Mode`}
+            >
+              {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
+            </button>
             <div 
               style={{
                 backgroundColor: getAvatarColor(admin.email),
