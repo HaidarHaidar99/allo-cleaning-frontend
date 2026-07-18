@@ -74,7 +74,7 @@ const ManageProducts = () => {
     setDescription(product.description);
     setPrice(product.price !== null && product.price !== undefined ? product.price : '');
     setImageFile(null);
-    setImagePreview(product.imageUrl ? `${API_BASE_URL.replace('/api', '')}${product.imageUrl}` : '');
+    setImagePreview(product.imageUrl ? (product.imageUrl.startsWith('http') ? product.imageUrl : `${API_BASE_URL.replace('/api', '')}${product.imageUrl}`) : '');
     setError('');
     setIsModalOpen(true);
   };
@@ -243,9 +243,13 @@ const ManageProducts = () => {
                   <tr key={product.id}>
                     <td data-label="Image">
                       <img 
-                        src={product.imageUrl ? `${API_BASE_URL.replace('/api', '')}${product.imageUrl}` : '/uploads/logo.jpg'} 
+                        src={product.imageUrl ? (product.imageUrl.startsWith('http') ? product.imageUrl : `${API_BASE_URL.replace('/api', '')}${product.imageUrl}`) : 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=100&auto=format&fit=crop'} 
                         alt={product.name} 
                         style={{ width: '45px', height: '45px', borderRadius: '8px', objectFit: 'cover', border: '1px solid var(--admin-border)' }}
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=100&auto=format&fit=crop';
+                        }}
                       />
                     </td>
                     <td data-label="Name" style={{ fontWeight: '700' }}>{product.name}</td>
@@ -262,7 +266,7 @@ const ManageProducts = () => {
                         ? `$${parseFloat(product.price).toFixed(2)}` 
                         : 'Contact Us'}
                     </td>
-                    <td data-label="">
+                    <td className="td-actions">
                       <div className="table-action-btns">
                         <button 
                           className="btn btn-outline btn-small"

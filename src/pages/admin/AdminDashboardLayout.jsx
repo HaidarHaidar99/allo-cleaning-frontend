@@ -19,7 +19,7 @@ const getAvatarColor = (email) => {
 };
 
 const AdminDashboardLayout = () => {
-  const { token, admin, logout } = useAdminAuth();
+  const { token, admin, setAdmin, logout } = useAdminAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
@@ -48,15 +48,35 @@ const AdminDashboardLayout = () => {
         if (res.status !== 200) {
           logout();
           navigate('/admin');
+          return null;
+        }
+        return res.json();
+      })
+      .then(data => {
+        if (data && data.admin) {
+          setAdmin(data.admin);
+          localStorage.setItem('allo_cleaning_admin_user', JSON.stringify(data.admin));
         }
       })
       .catch((err) => console.error('Auth check error:', err));
-  }, [token, navigate, location.pathname, logout]);
+  }, [token, navigate, location.pathname, logout, setAdmin]);
 
   // Close mobile sidebar on route change
   useEffect(() => {
     setMobileSidebarOpen(false);
   }, [location.pathname]);
+
+  // Disable body scroll when mobile sidebar is open
+  useEffect(() => {
+    if (mobileSidebarOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileSidebarOpen]);
 
   if (!token || !admin) {
     return (
@@ -88,9 +108,8 @@ const AdminDashboardLayout = () => {
         >
           {mobileSidebarOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
-        <Link to="/" className="sidebar-logo">
-          <Sparkles className="logo-icon text-cyan" size={18} />
-          <span>Allo Admin</span>
+        <Link to="/" className="mobile-top-logo">
+          <span>Admin Panel</span>
         </Link>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <button 
@@ -124,8 +143,7 @@ const AdminDashboardLayout = () => {
       <aside className={`admin-sidebar ${mobileSidebarOpen ? 'mobile-visible' : ''}`}>
         <div className="sidebar-logo-section">
           <Link to="/" className="sidebar-logo">
-            <Sparkles className="logo-icon text-cyan" />
-            <span>Allo Admin</span>
+            <span>Admin Panel</span>
           </Link>
           <span className="admin-badge">Admin Panel</span>
           

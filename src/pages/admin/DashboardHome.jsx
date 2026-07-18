@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAdminAuth } from '../../context/AdminAuthContext';
-import { Sparkles, Inbox, Users, Clock, ArrowRight, Eye } from 'lucide-react';
+import { Sparkles, Inbox, Users, Clock, ArrowRight, Eye, Package } from 'lucide-react';
 
 const DashboardHome = () => {
   const { fetchDashboardStats, getAuthHeaders, API_BASE_URL } = useAdminAuth();
@@ -10,6 +10,7 @@ const DashboardHome = () => {
     totalServices: 0,
     totalForms: 0,
     totalAdmins: 0,
+    totalProducts: 0,
   });
   
   const [recentForms, setRecentForms] = useState([]);
@@ -63,9 +64,20 @@ const DashboardHome = () => {
           </div>
         </div>
 
-        {/* Contact Forms Count */}
+        {/* Products Count */}
         <div className="admin-card">
           <div className="admin-card-icon bg-green">
+            <Package className="text-white" size={24} />
+          </div>
+          <div className="admin-card-info">
+            <h3>Total Products</h3>
+            <div className="count-val">{stats.totalProducts || 0}</div>
+          </div>
+        </div>
+
+        {/* Contact Forms Count */}
+        <div className="admin-card">
+          <div className="admin-card-icon bg-cyan">
             <Inbox className="text-white" size={24} />
           </div>
           <div className="admin-card-info">
@@ -76,7 +88,7 @@ const DashboardHome = () => {
 
         {/* Admins Count */}
         <div className="admin-card">
-          <div className="admin-card-icon bg-cyan">
+          <div className="admin-card-icon bg-green">
             <Users className="text-white" size={24} />
           </div>
           <div className="admin-card-info">
@@ -120,7 +132,7 @@ const DashboardHome = () => {
                         <span>{new Date(form.createdAt).toLocaleDateString()}</span>
                       </div>
                     </td>
-                    <td data-label="">
+                    <td className="td-actions">
                       <Link to="/admin/dashboard/forms" className="btn btn-outline btn-small" style={{ padding: '6px 12px' }}>
                         <Eye size={12} />
                         <span style={{ fontSize: '0.75rem' }}>View</span>
@@ -131,7 +143,7 @@ const DashboardHome = () => {
               </tbody>
             </table>
           ) : (
-            <div style={{ padding: '30px', textAlign: 'center', color: 'var(--text-light)' }}>
+            <div style={{ padding: '30px', textAlign: 'center', color: 'var(--admin-text-light)' }}>
               No messages have been submitted yet.
             </div>
           )}

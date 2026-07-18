@@ -328,7 +328,7 @@ const ManageSettings = () => {
 
                 {/* Stats row */}
                 <div className="form-group full-width" style={{ marginTop: '20px' }}>
-                  <h4 style={{ fontSize: '1rem', marginBottom: '15px', color: 'var(--text-dark)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <h4 style={{ fontSize: '1rem', marginBottom: '15px', color: 'var(--admin-text-main)', display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <Star size={16} className="text-cyan" />
                     <span>Company Statistics Widgets</span>
                   </h4>

@@ -35,15 +35,15 @@
   --admin-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
   --admin-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
 
-  /* Sidebar */
-  --admin-sidebar-bg: #1e3a8a;
-  --admin-sidebar-text: #93c5fd;
-  --admin-sidebar-active-bg: #ffffff;
-  --admin-sidebar-active-text: #1e3a8a;
-  --admin-sidebar-hover-bg: rgba(255, 255, 255, 0.08);
-  --admin-sidebar-hover-text: #ffffff;
-  --admin-sidebar-logo-text: #ffffff;
-  --admin-sidebar-border: rgba(255, 255, 255, 0.06);
+  /* Sidebar — WHITE in light mode */
+  --admin-sidebar-bg: #ffffff;
+  --admin-sidebar-text: #64748b;
+  --admin-sidebar-active-bg: rgba(37, 99, 235, 0.08);
+  --admin-sidebar-active-text: #2563eb;
+  --admin-sidebar-hover-bg: #f1f5f9;
+  --admin-sidebar-hover-text: #0f172a;
+  --admin-sidebar-logo-text: #0f172a;
+  --admin-sidebar-border: #e2e8f0;
 
   /* Input */
   --admin-input-border: #cbd5e1;
@@ -489,7 +489,7 @@
 
 .admin-card-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 22px;
   margin-bottom: 28px;
 }
@@ -1032,7 +1032,7 @@ select.form-control {
     top: 0;
     left: 0;
     width: 280px;
-    height: 100vh;
+    height: 100dvh; /* Dynamic viewport height to prevent keyboard/address bar cutoffs */
     transform: translateX(-100%);
     z-index: 250;
     box-shadow: 10px 0 30px rgba(0, 0, 0, 0.15);
@@ -1047,7 +1047,24 @@ select.form-control {
     display: flex;
     position: absolute;
     right: 18px;
-    top: 22px;
+    top: 18px;
+  }
+
+  .sidebar-logo-section {
+    padding: 16px 20px;
+  }
+
+  .sidebar-nav {
+    padding: 12px 10px;
+  }
+
+  .sidebar-nav ul li a {
+    padding: 9px 12px;
+    font-size: 0.88rem;
+  }
+
+  .sidebar-footer {
+    padding: 12px 10px;
   }
 
   .admin-viewport {
@@ -1058,6 +1075,10 @@ select.form-control {
 
   .admin-header {
     display: none;
+  }
+
+  .admin-card-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .stats-edit-grid {
@@ -1264,5 +1285,50 @@ select.form-control {
   .btn-small {
     padding: 6px 10px;
     font-size: 0.75rem;
+  }
+}
+
+/* ===================== CUSTOM NEW OVERRIDES ===================== */
+
+/* Mobile top bar logo styling */
+.mobile-top-logo {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--admin-text-main) !important;
+  font-family: 'Outfit', sans-serif;
+  letter-spacing: -0.5px;
+  text-decoration: none;
+}
+
+/* Ensure the light mode sidebar badge has high contrast on white background */
+.admin-theme-light .admin-badge {
+  background: var(--admin-primary-light);
+  border: 1px solid var(--admin-primary);
+  color: var(--admin-primary);
+}
+
+/* Dark mode glass-card override to prevent solid white glass panels */
+.admin-theme-dark .glass-card {
+  background: rgba(30, 41, 59, 0.7) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  color: var(--admin-text-main) !important;
+}
+
+/* Specific class for action cells in tables */
+.admin-table .td-actions {
+  text-align: right;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .admin-table .td-actions {
+    padding-top: 12px !important;
+    margin-top: 8px !important;
+    border-top: 1px solid var(--admin-border) !important;
+    justify-content: flex-end !important;
+    width: 100% !important;
+  }
+  .admin-table .td-actions::before {
+    display: none !important;
   }
 }

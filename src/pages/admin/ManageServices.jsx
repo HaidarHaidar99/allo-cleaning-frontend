@@ -67,7 +67,7 @@ const ManageServices = () => {
     setDescription(service.description);
     setPrice(service.price);
     setImageFile(null);
-    setImagePreview(service.imageUrl ? `${API_BASE_URL.replace('/api', '')}${service.imageUrl}` : '');
+    setImagePreview(service.imageUrl ? (service.imageUrl.startsWith('http') ? service.imageUrl : `${API_BASE_URL.replace('/api', '')}${service.imageUrl}`) : '');
     setError('');
     setIsModalOpen(true);
   };
@@ -243,7 +243,7 @@ const ManageServices = () => {
                       {service.description}
                     </td>
                     <td data-label="Price" className="font-bold">${parseFloat(service.price || 0).toFixed(2)}</td>
-                    <td data-label="">
+                    <td className="td-actions">
                       <div className="table-action-btns">
                         <button className="btn btn-outline btn-small" onClick={() => openEditModal(service)} style={{ padding: '6px 12px' }}>
                           <Edit2 size={12} />
@@ -259,7 +259,7 @@ const ManageServices = () => {
             </table>
           </div>
         ) : (
-          <div style={{ padding: '40px', textAlign: 'center', color: 'var(--text-light)' }}>
+          <div style={{ padding: '40px', textAlign: 'center', color: 'var(--admin-text-light)' }}>
             No cleaning services registered yet. Click "Add New Service" to start!
           </div>
         )}
@@ -321,7 +321,7 @@ const ManageServices = () => {
           {/* Image Upload Input */}
           <div className="form-group">
             <label>Service Image</label>
-            <div className="image-upload-wrapper" style={{ border: '1.5px dashed var(--border-color)', padding: '15px', borderRadius: 'var(--radius-md)', textAlign: 'center', backgroundColor: 'var(--bg-light)', position: 'relative' }}>
+            <div className="image-upload-wrapper" style={{ border: '1.5px dashed var(--admin-border)', padding: '15px', borderRadius: '12px', textAlign: 'center', backgroundColor: 'var(--admin-bg)', position: 'relative' }}>
               <input
                 type="file"
                 accept="image/*"
@@ -329,7 +329,7 @@ const ManageServices = () => {
                 style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0, cursor: 'pointer' }}
                 required={!isEditMode}
               />
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', color: 'var(--text-light)' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', color: 'var(--admin-text-light)' }}>
                 <UploadCloud size={24} />
                 <span style={{ fontSize: '0.8rem', fontWeight: 650 }}>{imageFile ? imageFile.name : 'Choose file or drag here'}</span>
               </div>

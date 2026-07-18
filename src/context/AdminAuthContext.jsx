@@ -27,6 +27,14 @@ export const AdminAuthProvider = ({ children }) => {
         .then((res) => {
           if (res.status !== 200) {
             logout(); // Auto-logout if token is expired/invalid/deleted (404)
+          } else {
+            return res.json();
+          }
+        })
+        .then((data) => {
+          if (data && data.admin) {
+            setAdmin(data.admin);
+            localStorage.setItem('allo_cleaning_admin_user', JSON.stringify(data.admin));
           }
         })
         .catch((err) => console.error('Token validation failed:', err));
@@ -174,6 +182,7 @@ export const AdminAuthProvider = ({ children }) => {
       value={{
         token,
         admin,
+        setAdmin,
         loading,
         login,
         logout,

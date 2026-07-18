@@ -130,7 +130,7 @@ const ManageForms = () => {
                     <td data-label="Preview" style={{ maxWidth: '200px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                       {form.message}
                     </td>
-                    <td data-label="">
+                    <td className="td-actions">
                       <div className="table-action-btns">
                         <button 
                           className="btn btn-outline btn-small" 
@@ -156,8 +156,8 @@ const ManageForms = () => {
             </table>
           </div>
         ) : (
-          <div style={{ padding: '40px', textAlign: 'center', color: 'var(--text-light)' }}>
-            <Inbox size={32} style={{ marginBottom: '10px', color: 'var(--text-muted)' }} />
+          <div style={{ padding: '40px', textAlign: 'center', color: 'var(--admin-text-light)' }}>
+            <Inbox size={32} style={{ marginBottom: '10px', color: 'var(--admin-text-muted)' }} />
             <p>No customer contact forms have been submitted yet.</p>
           </div>
         )}
@@ -172,7 +172,7 @@ const ManageForms = () => {
         {selectedForm && (
           <div className="form-details-view" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             {/* Metadata Info Panel */}
-            <div className="contact-metadata-grid" style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '12px', padding: '16px', backgroundColor: 'var(--bg-light)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
+            <div className="contact-metadata-grid" style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '12px', padding: '16px', backgroundColor: 'var(--admin-bg)', borderRadius: '12px', border: '1px solid var(--admin-border)' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <User size={16} className="text-cyan" />
                 <span><strong>Name:</strong> {selectedForm.fullName}</span>
@@ -193,8 +193,8 @@ const ManageForms = () => {
 
             {/* Message Body */}
             <div>
-              <h3 style={{ fontSize: '1rem', marginBottom: '8px', color: 'var(--primary-dark)' }}>Client Message</h3>
-              <div style={{ padding: '16px 20px', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--bg-white)', whiteSpace: 'pre-wrap', lineHeight: '1.6', fontSize: '0.95rem' }}>
+              <h3 style={{ fontSize: '1rem', marginBottom: '8px', color: 'var(--admin-text-main)' }}>Client Message</h3>
+              <div style={{ padding: '16px 20px', border: '1px solid var(--admin-border)', borderRadius: '12px', backgroundColor: 'var(--admin-card-bg)', whiteSpace: 'pre-wrap', lineHeight: '1.6', fontSize: '0.95rem' }}>
                 {selectedForm.message}
               </div>
             </div>

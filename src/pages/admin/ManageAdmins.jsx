@@ -245,7 +245,7 @@ const ManageAdmins = () => {
                         <span>{new Date(acc.createdAt).toLocaleDateString()}</span>
                       </div>
                     </td>
-                    <td data-label="">
+                    <td className="td-actions">
                       <div className="table-action-btns">
                         {acc.id === currentAdmin.id && acc.role !== 'Super Admin' && (
                           <button 
@@ -275,7 +275,7 @@ const ManageAdmins = () => {
             </table>
           </div>
         ) : (
-          <div style={{ padding: '40px', textAlign: 'center', color: 'var(--text-light)' }}>
+          <div style={{ padding: '40px', textAlign: 'center', color: 'var(--admin-text-light)' }}>
             No admin accounts found.
           </div>
         )}
@@ -347,7 +347,7 @@ const ManageAdmins = () => {
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
-                  color: 'var(--text-light)',
+                  color: 'var(--admin-text-light)',
                   padding: 0
                 }}
               >
@@ -422,7 +422,7 @@ const ManageAdmins = () => {
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
-                  color: 'var(--text-light)',
+                  color: 'var(--admin-text-light)',
                   padding: 0
                 }}
               >
@@ -457,7 +457,7 @@ const ManageAdmins = () => {
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
-                  color: 'var(--text-light)',
+                  color: 'var(--admin-text-light)',
                   padding: 0
                 }}
               >
@@ -492,7 +492,7 @@ const ManageAdmins = () => {
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
-                  color: 'var(--text-light)',
+                  color: 'var(--admin-text-light)',
                   padding: 0
                 }}
               >

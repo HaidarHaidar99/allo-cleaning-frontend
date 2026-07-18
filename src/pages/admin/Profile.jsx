@@ -255,7 +255,7 @@ const Profile = () => {
               className="form-control" 
               value={currentAdmin?.email || ''} 
               disabled 
-              style={{ backgroundColor: 'var(--bg-light)', color: 'var(--text-light)', cursor: 'not-allowed' }}
+              style={{ backgroundColor: 'var(--admin-bg)', color: 'var(--admin-text-light)', cursor: 'not-allowed' }}
             />
           </div>
 
@@ -292,7 +292,7 @@ const Profile = () => {
                 className="form-control" 
                 value={currentAdmin?.role || ''} 
                 disabled 
-                style={{ backgroundColor: 'var(--bg-light)', color: 'var(--text-light)', cursor: 'not-allowed' }}
+                style={{ backgroundColor: 'var(--admin-bg)', color: 'var(--admin-text-light)', cursor: 'not-allowed' }}
               />
             )}
           </div>
@@ -304,7 +304,7 @@ const Profile = () => {
                 <ShieldCheck className="text-green" size={20} />
                 <h4 style={{ margin: 0, fontSize: '0.95rem' }}>Transfer Super Admin Role</h4>
               </div>
-              <p style={{ fontSize: '0.8rem', color: 'var(--text-medium)', lineHeight: 1.4, margin: 0 }}>
+              <p style={{ fontSize: '0.8rem', color: 'var(--admin-text-medium)', lineHeight: 1.4, margin: 0 }}>
                 There must always be a Super Admin. To demote your account to Admin, you must promote another administrator account.
               </p>
 
@@ -411,7 +411,7 @@ const Profile = () => {
                           cursor: 'pointer',
                           display: 'flex',
                           alignItems: 'center',
-                          color: 'var(--text-light)',
+                          color: 'var(--admin-text-light)',
                           padding: 0
                         }}
                       >
@@ -469,7 +469,7 @@ const Profile = () => {
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
-                  color: 'var(--text-light)',
+                  color: 'var(--admin-text-light)',
                   padding: 0
                 }}
               >
@@ -504,7 +504,7 @@ const Profile = () => {
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
-                  color: 'var(--text-light)',
+                  color: 'var(--admin-text-light)',
                   padding: 0
                 }}
               >
@@ -539,7 +539,7 @@ const Profile = () => {
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
-                  color: 'var(--text-light)',
+                  color: 'var(--admin-text-light)',
                   padding: 0
                 }}
               >
@@ -569,7 +569,7 @@ const Profile = () => {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '20px', gap: '20px', flexWrap: 'wrap' }}>
           <div>
             <h4 style={{ margin: 0, fontSize: '0.95rem' }}>Delete Administrator Account</h4>
-            <p style={{ margin: '4px 0 0 0', fontSize: '0.8rem', color: 'var(--text-light)', lineHeight: 1.4 }}>
+            <p style={{ margin: '4px 0 0 0', fontSize: '0.8rem', color: 'var(--admin-text-light)', lineHeight: 1.4 }}>
               Deleting your account is permanent and cannot be undone. You will lose access immediately.
             </p>
           </div>

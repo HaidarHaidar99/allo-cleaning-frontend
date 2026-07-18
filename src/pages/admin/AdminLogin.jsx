@@ -58,9 +58,6 @@ const AdminLogin = () => {
       <div className="login-container animate-fade-in">
         {/* Branding Header */}
         <div className="login-header">
-          <div className="login-logo-icon">
-            <Sparkles size={28} />
-          </div>
           <h1>Allo Cleaning</h1>
           <p className="login-subtitle">Admin Dashboard</p>
         </div>
@@ -86,7 +83,7 @@ const AdminLogin = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="form-control login-input"
-                placeholder="you@example.com"
+                placeholder=""
                 required
                 autoComplete="email"
               />
@@ -103,7 +100,7 @@ const AdminLogin = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="form-control login-input"
-                placeholder="••••••••"
+                placeholder=""
                 required
                 autoComplete="current-password"
                 style={{ paddingRight: '48px' }}
