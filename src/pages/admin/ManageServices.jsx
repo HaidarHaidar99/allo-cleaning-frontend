@@ -379,7 +379,7 @@ const ManageServices = () => {
           <p>Are you sure you want to delete the service <strong>{serviceToDelete?.name}</strong>? This action is permanent and will remove the service from the database and the customer page catalog.</p>
           <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
             <button className="btn btn-outline" onClick={() => setIsDeleteModalOpen(false)}>Cancel</button>
-            <button className="btn btn-danger" onClick={handleDelete}>
+            <button className="btn btn-danger" onClick={handleDelete} style={{ minWidth: '160px', justifyContent: 'center' }}>
               <Trash2 size={16} />
               <span>Confirm Delete</span>
             </button>

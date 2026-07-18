@@ -83,7 +83,7 @@ const AdminLogin = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="form-control login-input"
-                placeholder="type email address"
+                placeholder="email address"
                 required
                 autoComplete="email"
               />
@@ -100,7 +100,7 @@ const AdminLogin = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="form-control login-input"
-                placeholder="type password"
+                placeholder="password"
                 required
                 autoComplete="current-password"
                 style={{ paddingRight: '48px' }}

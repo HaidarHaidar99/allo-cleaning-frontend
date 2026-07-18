@@ -528,7 +528,7 @@ const ManageAdmins = () => {
           <p>Are you sure you want to proceed with this account deletion? This action is permanent.</p>
           <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
             <button className="btn btn-outline" onClick={() => setIsDeleteModalOpen(false)} disabled={loading}>Cancel</button>
-            <button className="btn btn-danger" onClick={handleDelete} disabled={loading}>
+            <button className="btn btn-danger" onClick={handleDelete} disabled={loading} style={{ minWidth: '160px', justifyContent: 'center' }}>
               <Trash2 size={16} />
               <span>{loading ? 'Deleting...' : 'Confirm Delete'}</span>
             </button>
