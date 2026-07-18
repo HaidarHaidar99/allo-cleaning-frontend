@@ -37,7 +37,10 @@ export const AdminAuthProvider = ({ children }) => {
             localStorage.setItem('allo_cleaning_admin_user', JSON.stringify(data.admin));
           }
         })
-        .catch((err) => console.error('Token validation failed:', err));
+        .catch((err) => {
+          console.error('Token validation failed:', err);
+          logout();
+        });
     }
   }, [token]);
 

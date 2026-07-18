@@ -58,7 +58,11 @@ const AdminDashboardLayout = () => {
           localStorage.setItem('allo_cleaning_admin_user', JSON.stringify(data.admin));
         }
       })
-      .catch((err) => console.error('Auth check error:', err));
+      .catch((err) => {
+        console.error('Auth check error:', err);
+        logout();
+        navigate('/admin');
+      });
   }, [token, navigate, location.pathname, logout, setAdmin]);
 
   // Close mobile sidebar on route change
