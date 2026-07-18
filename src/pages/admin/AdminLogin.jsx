@@ -5,7 +5,7 @@ import { AlertCircle, Eye, EyeOff, Sparkles, Lock, Mail } from 'lucide-react';
 import '../../styles/AdminLogin.css';
 
 const AdminLogin = () => {
-  const { login, admin } = useAdminAuth();
+  const { token, login, admin } = useAdminAuth();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
@@ -16,10 +16,10 @@ const AdminLogin = () => {
 
   // Redirect to dashboard if already authenticated
   useEffect(() => {
-    if (admin) {
+    if (token && admin) {
       navigate('/admin/dashboard');
     }
-  }, [admin, navigate]);
+  }, [token, admin, navigate]);
 
   // Handle credentials login submit
   const handleSubmit = async (e) => {
