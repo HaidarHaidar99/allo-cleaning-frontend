@@ -111,16 +111,16 @@ const DashboardHome = () => {
               <tbody>
                 {recentForms.map((form) => (
                   <tr key={form.id}>
-                    <td className="font-bold">{form.fullName}</td>
-                    <td>{form.email}</td>
-                    <td>{form.phoneNumber}</td>
-                    <td>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.8rem', color: 'var(--text-light)' }}>
+                    <td data-label="Name" className="font-bold">{form.fullName}</td>
+                    <td data-label="Email">{form.email}</td>
+                    <td data-label="Phone">{form.phoneNumber}</td>
+                    <td data-label="Date">
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.8rem', color: 'var(--admin-text-light)' }}>
                         <Clock size={12} />
                         <span>{new Date(form.createdAt).toLocaleDateString()}</span>
                       </div>
                     </td>
-                    <td>
+                    <td data-label="">
                       <Link to="/admin/dashboard/forms" className="btn btn-outline btn-small" style={{ padding: '6px 12px' }}>
                         <Eye size={12} />
                         <span style={{ fontSize: '0.75rem' }}>View</span>

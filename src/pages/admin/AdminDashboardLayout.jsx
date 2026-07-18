@@ -80,7 +80,7 @@ const AdminDashboardLayout = () => {
     <div className={`admin-dashboard admin-theme-${theme} ${mobileSidebarOpen ? 'sidebar-open' : ''}`}>
       
       {/* Mobile Top Header Toggle Bar */}
-      <div className="admin-mobile-top-bar glass-card">
+      <div className="admin-mobile-top-bar">
         <button 
           className="sidebar-toggle-btn"
           onClick={() => setMobileSidebarOpen(!mobileSidebarOpen)}
@@ -92,23 +92,13 @@ const AdminDashboardLayout = () => {
           <Sparkles className="logo-icon text-cyan" size={18} />
           <span>Allo Admin</span>
         </Link>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <button 
             onClick={toggleTheme} 
             className="theme-toggle-btn"
-            style={{
-              background: 'transparent',
-              border: 'none',
-              color: 'var(--admin-text-medium)',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: '6px'
-            }}
             title={`Switch to ${theme === 'light' ? 'Dark' : 'Light'} Mode`}
           >
-            {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+            {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
           </button>
           <div 
             className="mobile-avatar"
@@ -131,7 +121,7 @@ const AdminDashboardLayout = () => {
       </div>
 
       {/* 1. Sidebar Navigation (drawer on mobile) */}
-      <aside className={`admin-sidebar glass-card ${mobileSidebarOpen ? 'mobile-visible' : ''}`}>
+      <aside className={`admin-sidebar ${mobileSidebarOpen ? 'mobile-visible' : ''}`}>
         <div className="sidebar-logo-section">
           <Link to="/" className="sidebar-logo">
             <Sparkles className="logo-icon text-cyan" />
@@ -215,7 +205,7 @@ const AdminDashboardLayout = () => {
       {/* 2. Main Viewport Content */}
       <main className="admin-viewport">
         {/* Header Profile Bar */}
-        <header className="admin-header glass-card">
+        <header className="admin-header">
           <div className="header-greeting">
             <h1>Welcome, {admin.fullName}</h1>
             <p>Role: <strong>{admin.role}</strong></p>
@@ -224,20 +214,6 @@ const AdminDashboardLayout = () => {
             <button 
               onClick={toggleTheme} 
               className="theme-toggle-btn"
-              style={{
-                background: 'transparent',
-                border: 'none',
-                color: 'var(--admin-text-medium)',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: '8px',
-                borderRadius: '50%',
-                backgroundColor: 'var(--admin-bg)',
-                border: '1px solid var(--admin-border)',
-                marginRight: '12px'
-              }}
               title={`Switch to ${theme === 'light' ? 'Dark' : 'Light'} Mode`}
             >
               {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}

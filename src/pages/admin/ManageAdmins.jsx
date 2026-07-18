@@ -229,23 +229,23 @@ const ManageAdmins = () => {
               </thead>
               <tbody>
                 {admins.map((acc) => (
-                  <tr key={acc.id} style={acc.id === currentAdmin.id ? { backgroundColor: 'var(--accent-cyan-light)' } : {}}>
-                    <td className="font-bold">
-                      {acc.fullName} {acc.id === currentAdmin.id && <span style={{ fontSize: '0.7rem', color: 'var(--accent-cyan-hover)', fontStyle: 'italic' }}>(You)</span>}
+                  <tr key={acc.id} style={acc.id === currentAdmin.id ? { backgroundColor: 'var(--admin-primary-light)' } : {}}>
+                    <td data-label="Name" className="font-bold">
+                      {acc.fullName} {acc.id === currentAdmin.id && <span style={{ fontSize: '0.7rem', color: 'var(--admin-primary)', fontStyle: 'italic' }}>(You)</span>}
                     </td>
-                    <td>{acc.email}</td>
-                    <td>
+                    <td data-label="Email">{acc.email}</td>
+                    <td data-label="Role">
                       <span className={`badge ${acc.role === 'Super Admin' ? 'badge-green' : 'badge-cyan'}`}>
                         {acc.role}
                       </span>
                     </td>
-                    <td>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.8rem', color: 'var(--text-light)' }}>
+                    <td data-label="Created">
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.8rem', color: 'var(--admin-text-light)' }}>
                         <Clock size={12} />
                         <span>{new Date(acc.createdAt).toLocaleDateString()}</span>
                       </div>
                     </td>
-                    <td>
+                    <td data-label="">
                       <div className="table-action-btns">
                         {acc.id === currentAdmin.id && acc.role !== 'Super Admin' && (
                           <button 

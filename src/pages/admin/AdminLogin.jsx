@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAdminAuth } from '../../context/AdminAuthContext';
-import { AlertCircle, Eye, EyeOff } from 'lucide-react';
+import { AlertCircle, Eye, EyeOff, Sparkles, Lock, Mail } from 'lucide-react';
 import '../../styles/AdminLogin.css';
 
 const AdminLogin = () => {
@@ -40,13 +40,32 @@ const AdminLogin = () => {
     }
   };
 
+  // Toggle password visibility without dismissing mobile keyboard
+  const handleTogglePassword = (e) => {
+    e.preventDefault(); // Prevents input blur → keyboard stays open on mobile
+    setShowPassword(!showPassword);
+  };
+
   return (
     <div className="login-page">
-      <div className="login-container glass-card animate-fade-in">
-        {/* Header */}
+      {/* Background animated shapes */}
+      <div className="login-bg-shapes">
+        <div className="shape shape-1"></div>
+        <div className="shape shape-2"></div>
+        <div className="shape shape-3"></div>
+      </div>
+
+      <div className="login-container animate-fade-in">
+        {/* Branding Header */}
         <div className="login-header">
-          <h1><strong>Login</strong> to continue</h1>
+          <div className="login-logo-icon">
+            <Sparkles size={28} />
+          </div>
+          <h1>Allo Cleaning</h1>
+          <p className="login-subtitle">Admin Dashboard</p>
         </div>
+
+        <div className="login-divider"></div>
 
         {/* Error alerts */}
         {error && (
@@ -59,60 +78,60 @@ const AdminLogin = () => {
         <form onSubmit={handleSubmit} className="login-form">
           <div className="form-group">
             <label htmlFor="email">Email Address</label>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="form-control"
-              placeholder="Email Address"
-              required
-            />
+            <div className="login-input-wrapper">
+              <Mail size={18} className="login-input-icon" />
+              <input
+                type="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="form-control login-input"
+                placeholder="you@example.com"
+                required
+                autoComplete="email"
+              />
+            </div>
           </div>
 
           <div className="form-group">
             <label htmlFor="password">Password</label>
-            <div style={{ position: 'relative' }}>
+            <div className="login-input-wrapper">
+              <Lock size={18} className="login-input-icon" />
               <input
                 type={showPassword ? 'text' : 'password'}
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="form-control"
-                placeholder="Password"
+                className="form-control login-input"
+                placeholder="••••••••"
                 required
-                style={{ paddingRight: '40px' }}
+                autoComplete="current-password"
+                style={{ paddingRight: '48px' }}
               />
               <button
                 type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                style={{
-                  position: 'absolute',
-                  right: '12px',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  background: 'none',
-                  border: 'none',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  color: 'var(--admin-text-light)',
-                  padding: 0
-                }}
+                onMouseDown={handleTogglePassword}
+                className="login-eye-btn"
+                tabIndex={-1}
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
               >
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
             </div>
           </div>
 
-          <button type="submit" className="btn btn-primary login-btn" disabled={loading}>
+          <button type="submit" className="login-btn" disabled={loading}>
             {loading ? (
-              <div className="spinner-loader animate-spin"></div>
+              <div className="spinner-loader"></div>
             ) : (
               <span>Sign In</span>
             )}
           </button>
         </form>
+
+        <div className="login-footer">
+          <p>Secure admin access only</p>
+        </div>
       </div>
     </div>
   );

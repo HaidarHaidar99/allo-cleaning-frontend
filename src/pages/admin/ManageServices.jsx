@@ -226,24 +226,24 @@ const ManageServices = () => {
               <tbody>
                 {services.map((service) => (
                   <tr key={service.id}>
-                    <td>
+                    <td data-label="Image">
                       <img 
                         src={getThumbnailUrl(service.imageUrl)} 
                         alt={service.name} 
-                        style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '4px', border: '1px solid var(--border-color)' }}
+                        style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '4px', border: '1px solid var(--admin-border)' }}
                         onError={(e) => {
                           e.target.onerror = null;
                           e.target.src = 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=100&auto=format&fit=crop';
                         }}
                       />
                     </td>
-                    <td className="font-bold">{service.name}</td>
-                    <td><span className="badge badge-cyan">{service.category}</span></td>
-                    <td style={{ maxWidth: '300px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    <td data-label="Name" className="font-bold">{service.name}</td>
+                    <td data-label="Category"><span className="badge badge-cyan">{service.category}</span></td>
+                    <td data-label="Description" style={{ maxWidth: '300px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                       {service.description}
                     </td>
-                    <td className="font-bold">${parseFloat(service.price || 0).toFixed(2)}</td>
-                    <td>
+                    <td data-label="Price" className="font-bold">${parseFloat(service.price || 0).toFixed(2)}</td>
+                    <td data-label="">
                       <div className="table-action-btns">
                         <button className="btn btn-outline btn-small" onClick={() => openEditModal(service)} style={{ padding: '6px 12px' }}>
                           <Edit2 size={12} />

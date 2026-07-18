@@ -32,6 +32,13 @@ const ManageProducts = () => {
     setLoading(true);
     try {
       const res = await fetch(`${API_BASE_URL}/products`);
+
+      // Defensive check: ensure server returned JSON, not HTML
+      const contentType = res.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        throw new Error('Backend API is not reachable. Please ensure the backend server is running.');
+      }
+
       if (!res.ok) throw new Error('Failed to load products.');
       const data = await res.json();
       setProducts(data);
@@ -126,6 +133,12 @@ const ManageProducts = () => {
         body: formData,
       });
 
+      // Defensive check for HTML response
+      const responseContentType = response.headers.get('content-type');
+      if (!responseContentType || !responseContentType.includes('application/json')) {
+        throw new Error('Backend API returned an unexpected response. Please check that the server is running.');
+      }
+
       const data = await response.json();
 
       if (!response.ok) {
@@ -209,8 +222,8 @@ const ManageProducts = () => {
 
         {/* Products Grid / Table View */}
         {loading ? (
-          <div style={{ display: 'flex', justifyContent: 'center', padding: '50px' }}>
-            <div className="spinner" style={{ width: '40px', height: '40px', border: '4px solid var(--admin-border)', borderTopColor: 'var(--admin-primary)', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div>
+          <div className="loading-spinner-wrapper">
+            <div className="spinner"></div>
           </div>
         ) : products.length > 0 ? (
           <div className="table-responsive">
@@ -228,28 +241,28 @@ const ManageProducts = () => {
               <tbody>
                 {products.map((product) => (
                   <tr key={product.id}>
-                    <td>
+                    <td data-label="Image">
                       <img 
                         src={product.imageUrl ? `${API_BASE_URL.replace('/api', '')}${product.imageUrl}` : '/uploads/logo.jpg'} 
                         alt={product.name} 
                         style={{ width: '45px', height: '45px', borderRadius: '8px', objectFit: 'cover', border: '1px solid var(--admin-border)' }}
                       />
                     </td>
-                    <td style={{ fontWeight: '700' }}>{product.name}</td>
-                    <td>
+                    <td data-label="Name" style={{ fontWeight: '700' }}>{product.name}</td>
+                    <td data-label="Category">
                       <span className="badge" style={{ backgroundColor: 'var(--admin-badge-bg)', color: 'var(--admin-badge-text)', border: '1px solid var(--admin-badge-border)', padding: '4px 8px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 'bold' }}>
                         {product.category}
                       </span>
                     </td>
-                    <td style={{ maxWidth: '280px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: 'var(--admin-text-light)' }}>
+                    <td data-label="Description" style={{ maxWidth: '280px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: 'var(--admin-text-light)' }}>
                       {product.description}
                     </td>
-                    <td style={{ fontWeight: '800' }}>
+                    <td data-label="Price" style={{ fontWeight: '800' }}>
                       {product.price !== null && product.price !== undefined && parseFloat(product.price) > 0 
                         ? `$${parseFloat(product.price).toFixed(2)}` 
                         : 'Contact Us'}
                     </td>
-                    <td>
+                    <td data-label="">
                       <div className="table-action-btns">
                         <button 
                           className="btn btn-outline btn-small"
@@ -273,7 +286,7 @@ const ManageProducts = () => {
             </table>
           </div>
         ) : (
-          <div style={{ textAlign: 'center', padding: '50px', border: '1.5px dashed var(--admin-border)', borderRadius: 'var(--radius-lg)' }}>
+          <div style={{ textAlign: 'center', padding: '50px', border: '1.5px dashed var(--admin-border)', borderRadius: '16px' }}>
             <h3 style={{ fontSize: '1.2rem', marginBottom: '8px' }}>No Products Available</h3>
             <p className="text-muted" style={{ fontSize: '0.9rem', marginBottom: '20px' }}>Get started by adding your first product to the catalog.</p>
             <button className="btn btn-primary btn-small" onClick={openAddModal}>
@@ -340,14 +353,14 @@ const ManageProducts = () => {
           {/* Image Upload Input */}
           <div className="form-group">
             <label>Product Image</label>
-            <div className="image-upload-wrapper" style={{ border: '1.5px dashed var(--admin-border)', padding: '15px', borderRadius: 'var(--radius-md)', textAlign: 'center', backgroundColor: 'var(--admin-bg)', position: 'relative' }}>
+            <div className="image-upload-wrapper" style={{ border: '1.5px dashed var(--admin-border)', padding: '15px', borderRadius: '10px', textAlign: 'center', backgroundColor: 'var(--admin-bg)', position: 'relative' }}>
               <input
                 type="file"
                 accept="image/*"
                 onChange={handleImageChange}
                 style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0, cursor: 'pointer' }}
               />
-              <UploadCloud size={32} style={{ color: 'var(--admin-text-medium)', marginBottom: '8px' }} />
+              <UploadCloud size={32} style={{ color: 'var(--admin-text-muted)', marginBottom: '8px' }} />
               <p style={{ fontSize: '0.8rem', fontWeight: 'bold' }}>Click or Drag Image Here</p>
               <p className="text-muted" style={{ fontSize: '0.7rem', marginTop: '2px' }}>PNG, JPG, JPEG or WEBP (Max. 5MB)</p>
             </div>

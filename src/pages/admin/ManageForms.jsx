@@ -118,19 +118,19 @@ const ManageForms = () => {
               <tbody>
                 {forms.map((form) => (
                   <tr key={form.id}>
-                    <td className="font-bold">{form.fullName}</td>
-                    <td>{form.email}</td>
-                    <td>{form.phoneNumber}</td>
-                    <td>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.8rem', color: 'var(--text-light)' }}>
+                    <td data-label="Name" className="font-bold">{form.fullName}</td>
+                    <td data-label="Email">{form.email}</td>
+                    <td data-label="Phone">{form.phoneNumber}</td>
+                    <td data-label="Date">
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.8rem', color: 'var(--admin-text-light)' }}>
                         <Clock size={12} />
                         <span>{new Date(form.createdAt).toLocaleString()}</span>
                       </div>
                     </td>
-                    <td style={{ maxWidth: '200px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    <td data-label="Preview" style={{ maxWidth: '200px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                       {form.message}
                     </td>
-                    <td>
+                    <td data-label="">
                       <div className="table-action-btns">
                         <button 
                           className="btn btn-outline btn-small" 
