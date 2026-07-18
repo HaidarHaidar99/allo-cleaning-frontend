@@ -17,7 +17,10 @@ const ManageAdmins = () => {
   const navigate = useNavigate();
 
   const [admins, setAdmins] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [tableLoading, setTableLoading] = useState(true);
+  const [addLoading, setAddLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [passwordLoading, setPasswordLoading] = useState(false);
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
 
@@ -46,14 +49,14 @@ const ManageAdmins = () => {
   const [adminToDelete, setAdminToDelete] = useState(null);
 
   const loadAdmins = async () => {
-    setLoading(true);
+    setTableLoading(true);
     try {
       const data = await fetchAdmins();
       setAdmins(data);
     } catch (err) {
       setError(err.message);
     } finally {
-      setLoading(false);
+      setTableLoading(false);
     }
   };
 
@@ -110,16 +113,16 @@ const ManageAdmins = () => {
       return;
     }
 
-    setLoading(true);
+    setAddLoading(true);
     try {
       await createAdmin({ fullName, email, password, role });
       setSuccessMessage('Admin account created successfully!');
       setIsAddModalOpen(false);
-      loadAdmins();
+      await loadAdmins();
     } catch (err) {
       setError(err.message);
     } finally {
-      setLoading(false);
+      setAddLoading(false);
     }
   };
 
@@ -144,7 +147,7 @@ const ManageAdmins = () => {
       return;
     }
 
-    setLoading(true);
+    setPasswordLoading(true);
     try {
       await updateAdminPassword(selectedAdminId, oldPassword, newPassword);
       setSuccessMessage(`Password for ${selectedAdminName} updated successfully.`);
@@ -152,7 +155,7 @@ const ManageAdmins = () => {
     } catch (err) {
       setError(err.message);
     } finally {
-      setLoading(false);
+      setPasswordLoading(false);
     }
   };
 
@@ -162,7 +165,7 @@ const ManageAdmins = () => {
     setError('');
     setSuccessMessage('');
 
-    setLoading(true);
+    setDeleteLoading(true);
     try {
       await deleteAdmin(adminToDelete.id);
       setSuccessMessage(`Admin account for ${adminToDelete.fullName} deleted successfully.`);
@@ -173,13 +176,13 @@ const ManageAdmins = () => {
       if (wasSelf) {
         logout();
       } else {
-        loadAdmins();
+        await loadAdmins();
       }
     } catch (err) {
       setError(err.message);
       setIsDeleteModalOpen(false);
     } finally {
-      setLoading(false);
+      setDeleteLoading(false);
     }
   };
 
@@ -212,7 +215,7 @@ const ManageAdmins = () => {
         )}
 
         {/* Admins Table */}
-        {loading && admins.length === 0 ? (
+        {tableLoading && admins.length === 0 ? (
           <div className="loading-spinner-wrapper">
             <div className="spinner"></div>
           </div>
@@ -375,8 +378,8 @@ const ManageAdmins = () => {
 
           <div className="form-group full-width" style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '10px' }}>
             <button type="button" className="btn btn-outline" onClick={() => setIsAddModalOpen(false)}>Cancel</button>
-            <button type="submit" className="btn btn-primary" disabled={loading} style={{ width: '220px', justifyContent: 'center' }}>
-              <span>{loading ? 'Registering...' : 'Register Administrator'}</span>
+            <button type="submit" className="btn btn-primary" disabled={addLoading} style={{ width: '220px', justifyContent: 'center' }}>
+              <span>{addLoading ? 'Registering...' : 'Register Administrator'}</span>
               <ArrowRight size={14} />
             </button>
           </div>
@@ -504,9 +507,9 @@ const ManageAdmins = () => {
 
           <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '10px' }}>
             <button type="button" className="btn btn-outline" onClick={() => setIsPasswordModalOpen(false)}>Cancel</button>
-            <button type="submit" className="btn btn-primary" disabled={loading}>
+            <button type="submit" className="btn btn-primary" disabled={passwordLoading}>
               <Check size={16} />
-              <span>{loading ? 'Saving...' : 'Update Password'}</span>
+              <span>{passwordLoading ? 'Saving...' : 'Update Password'}</span>
             </button>
           </div>
         </form>
@@ -527,10 +530,10 @@ const ManageAdmins = () => {
           </div>
           <p>Are you sure you want to proceed with this account deletion? This action is permanent.</p>
           <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
-            <button className="btn btn-outline" onClick={() => setIsDeleteModalOpen(false)} disabled={loading}>Cancel</button>
-            <button className="btn btn-danger" onClick={handleDelete} disabled={loading} style={{ width: '160px', justifyContent: 'center' }}>
+            <button className="btn btn-outline" onClick={() => setIsDeleteModalOpen(false)} disabled={deleteLoading}>Cancel</button>
+            <button className="btn btn-danger" onClick={handleDelete} disabled={deleteLoading} style={{ width: '160px', justifyContent: 'center' }}>
               <Trash2 size={16} />
-              <span>{loading ? 'Deleting...' : 'Confirm Delete'}</span>
+              <span>{deleteLoading ? 'Deleting...' : 'Confirm Delete'}</span>
             </button>
           </div>
         </div>
