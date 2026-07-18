@@ -17,9 +17,7 @@ const ManageServices = () => {
   const [selectedServiceId, setSelectedServiceId] = useState(null);
   
   const [name, setName] = useState('');
-  const [category, setCategory] = useState('');
   const [description, setDescription] = useState('');
-  const [price, setPrice] = useState('');
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState('');
 
@@ -50,9 +48,7 @@ const ManageServices = () => {
     setIsEditMode(false);
     setSelectedServiceId(null);
     setName('');
-    setCategory('');
     setDescription('');
-    setPrice('');
     setImageFile(null);
     setImagePreview('');
     setError('');
@@ -63,9 +59,7 @@ const ManageServices = () => {
     setIsEditMode(true);
     setSelectedServiceId(service.id);
     setName(service.name);
-    setCategory(service.category);
     setDescription(service.description);
-    setPrice(service.price);
     setImageFile(null);
     setImagePreview(service.imageUrl ? (service.imageUrl.startsWith('http') ? service.imageUrl : `${API_BASE_URL.replace('/api', '')}${service.imageUrl}`) : '');
     setError('');
@@ -87,8 +81,8 @@ const ManageServices = () => {
     setError('');
     setSuccessMessage('');
 
-    if (!name || !category || !description) {
-      setError('Name, category, and description are required.');
+    if (!name || !description) {
+      setError('Name and description are required.');
       return;
     }
 
@@ -100,9 +94,7 @@ const ManageServices = () => {
     // Build FormData object
     const formData = new FormData();
     formData.append('name', name);
-    formData.append('category', category);
     formData.append('description', description);
-    formData.append('price', price);
     if (imageFile) {
       formData.append('image', imageFile);
     }
@@ -217,9 +209,7 @@ const ManageServices = () => {
                 <tr>
                   <th>Image</th>
                   <th>Service Name</th>
-                  <th>Category</th>
                   <th>Description Preview</th>
-                  <th>Price</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -238,11 +228,9 @@ const ManageServices = () => {
                       />
                     </td>
                     <td data-label="Name" className="font-bold">{service.name}</td>
-                    <td data-label="Category"><span className="badge badge-cyan">{service.category}</span></td>
                     <td data-label="Description" style={{ maxWidth: '300px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                       {service.description}
                     </td>
-                    <td data-label="Price" className="font-bold">${parseFloat(service.price || 0).toFixed(2)}</td>
                     <td className="td-actions">
                       <div className="table-action-btns">
                         <button className="btn btn-outline btn-small" onClick={() => openEditModal(service)} style={{ padding: '6px 12px' }}>
@@ -289,32 +277,6 @@ const ManageServices = () => {
               className="form-control"
               placeholder="Service Name"
               required
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="serviceCategory">Category</label>
-            <input
-              type="text"
-              id="serviceCategory"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              className="form-control"
-              placeholder="Category"
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="servicePrice">Price ($) (Optional)</label>
-            <input
-              type="number"
-              id="servicePrice"
-              step="0.01"
-              value={price}
-              onChange={(e) => setPrice(e.target.value)}
-              className="form-control"
-              placeholder="Price ($)"
             />
           </div>
 

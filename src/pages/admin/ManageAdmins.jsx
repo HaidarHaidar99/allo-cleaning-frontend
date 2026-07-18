@@ -375,7 +375,7 @@ const ManageAdmins = () => {
 
           <div className="form-group full-width" style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '10px' }}>
             <button type="button" className="btn btn-outline" onClick={() => setIsAddModalOpen(false)}>Cancel</button>
-            <button type="submit" className="btn btn-primary" disabled={loading}>
+            <button type="submit" className="btn btn-primary" disabled={loading} style={{ width: '220px', justifyContent: 'center' }}>
               <span>{loading ? 'Registering...' : 'Register Administrator'}</span>
               <ArrowRight size={14} />
             </button>
@@ -519,9 +519,9 @@ const ManageAdmins = () => {
         title="Confirm Account Deletion"
       >
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start', color: '#b91c1c', backgroundColor: '#fee2e2', padding: '12px 16px', borderRadius: 'var(--radius-md)', border: '1px solid rgba(239, 68, 68, 0.2)' }}>
-            <ShieldAlert size={20} style={{ flexShrink: 0 }} />
-            <p style={{ fontSize: '0.85rem', fontWeight: 550, lineHeight: 1.4 }}>
+          <div className="alert alert-error" style={{ alignItems: 'flex-start', textAlign: 'left' }}>
+            <ShieldAlert size={20} style={{ flexShrink: 0, marginTop: '2px' }} />
+            <p style={{ fontSize: '0.85rem', fontWeight: 550, lineHeight: 1.4, margin: 0 }}>
               WARNING: You are deleting the administrator account for <strong>{adminToDelete?.fullName}</strong> ({adminToDelete?.email}). They will immediately lose access to the system.
             </p>
           </div>
