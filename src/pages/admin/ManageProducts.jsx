@@ -419,20 +419,13 @@ const ManageProducts = () => {
       >
         <div style={{ padding: '10px 0' }}>
           <p style={{ fontSize: '0.95rem', marginBottom: '20px', lineHeight: '1.5' }}>
-            Are you sure you want to delete the product <strong>{productToDelete?.name}</strong>? This action is permanent and cannot be undone.
+            Are you sure you want to delete the product <strong>{productToDelete?.name}</strong>? This action is permanent and will remove the product from the catalog.
           </p>
           <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
-            <button 
-              className="btn btn-outline"
-              onClick={() => setIsDeleteModalOpen(false)}
-            >
-              No, Keep It
-            </button>
-            <button 
-              className="btn btn-danger"
-              onClick={handleDelete}
-            >
-              Yes, Delete
+            <button className="btn btn-outline" onClick={() => setIsDeleteModalOpen(false)} disabled={loading}>Cancel</button>
+            <button className="btn btn-danger" onClick={handleDelete} disabled={loading} style={{ width: '160px', justifyContent: 'center' }}>
+              <Trash2 size={16} />
+              <span>{loading ? 'Deleting...' : 'Confirm Delete'}</span>
             </button>
           </div>
         </div>

@@ -31,6 +31,16 @@ const AdminDashboardLayout = () => {
     localStorage.setItem('allo_admin_theme', newTheme);
   };
 
+  // Sync theme class to document.body so React Portals inherit dark mode
+  useEffect(() => {
+    if (theme === 'dark') {
+      document.body.classList.add('admin-theme-dark');
+    } else {
+      document.body.classList.remove('admin-theme-dark');
+    }
+    return () => document.body.classList.remove('admin-theme-dark');
+  }, [theme]);
+
   // Route security check: redirect if not authenticated or user deleted
   useEffect(() => {
     if (!token) {

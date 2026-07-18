@@ -227,7 +227,7 @@ const ManageForms = () => {
           <p>Are you sure you want to delete the submission from <strong>{formToDelete?.fullName}</strong>? This action is permanent and cannot be undone.</p>
           <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
             <button className="btn btn-outline" onClick={() => setIsDeleteOpen(false)}>Cancel</button>
-            <button className="btn btn-danger" onClick={handleDelete} style={{ minWidth: '160px', justifyContent: 'center' }}>
+            <button className="btn btn-danger" onClick={handleDelete} style={{ width: '160px', justifyContent: 'center' }}>
               <Trash2 size={16} />
               <span>Confirm Delete</span>
             </button>
