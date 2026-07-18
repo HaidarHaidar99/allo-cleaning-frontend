@@ -10,6 +10,7 @@ const ManageAdmins = () => {
     fetchAdmins, 
     createAdmin,
     updateAdminPassword, 
+    deleteAdmin,
     logout
   } = useAdminAuth();
 

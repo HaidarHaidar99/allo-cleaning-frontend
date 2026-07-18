@@ -886,22 +886,22 @@ select.form-control {
   color: var(--admin-text-main);
 }
 
-.admin-theme-dark .modal-content .form-group label {
+.admin-theme-dark .form-group label {
   color: var(--admin-text-main);
 }
 
-.admin-theme-dark .modal-content .form-control {
+.admin-theme-dark .form-control {
   background: var(--admin-input-bg);
   border-color: var(--admin-input-border);
   color: var(--admin-text-main);
 }
 
-.admin-theme-dark .modal-content .form-control:focus {
+.admin-theme-dark .form-control:focus {
   border-color: var(--admin-primary);
   box-shadow: 0 0 0 3px var(--admin-input-focus-ring);
 }
 
-.admin-theme-dark .modal-content .form-control::placeholder {
+.admin-theme-dark .form-control::placeholder {
   color: var(--admin-text-muted);
 }
 

@@ -59,7 +59,7 @@ const AdminLogin = () => {
         {/* Branding Header */}
         <div className="login-header">
           <h1>Allo Cleaning</h1>
-          <p className="login-subtitle">Admin Dashboard</p>
+          <p className="login-subtitle">login to continue</p>
         </div>
 
         <div className="login-divider"></div>
@@ -83,7 +83,7 @@ const AdminLogin = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="form-control login-input"
-                placeholder=""
+                placeholder="type email address"
                 required
                 autoComplete="email"
               />
@@ -100,7 +100,7 @@ const AdminLogin = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="form-control login-input"
-                placeholder=""
+                placeholder="type password"
                 required
                 autoComplete="current-password"
                 style={{ paddingRight: '48px' }}
