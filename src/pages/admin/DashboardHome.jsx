@@ -23,13 +23,13 @@ const DashboardHome = () => {
         const statsData = await fetchDashboardStats();
         setStats(statsData);
 
-        // 2. Fetch all contact forms and slice the first 5
-        const formsRes = await fetch(`${API_BASE_URL}/forms`, {
+        // 2. Fetch the 5 most recent contact forms
+        const formsRes = await fetch(`${API_BASE_URL}/forms?limit=5`, {
           headers: getAuthHeaders(),
         });
         if (formsRes.ok) {
           const formsData = await formsRes.json();
-          setRecentForms(formsData.slice(0, 5));
+          setRecentForms(formsData);
         }
       } catch (err) {
         console.error('Failed to load dashboard data:', err);

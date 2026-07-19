@@ -73,7 +73,7 @@ const AdminDashboardLayout = () => {
         logout();
         navigate('/admin');
       });
-  }, [token, navigate, location.pathname, logout, setAdmin]);
+  }, [token, navigate, logout, setAdmin]);
 
   // Close mobile sidebar on route change
   useEffect(() => {

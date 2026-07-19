@@ -61,12 +61,14 @@ const ManageAdmins = () => {
   };
 
   useEffect(() => {
-    if (currentAdmin && currentAdmin.role !== 'Super Admin') {
-      navigate('/admin/dashboard');
-    } else {
-      loadAdmins();
+    if (currentAdmin) {
+      if (currentAdmin.role !== 'Super Admin') {
+        navigate('/admin/dashboard');
+      } else {
+        loadAdmins();
+      }
     }
-  }, [currentAdmin, navigate]);
+  }, [currentAdmin?.role, navigate]);
 
   const openAddModal = () => {
     setFullName('');

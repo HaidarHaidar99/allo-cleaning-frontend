@@ -69,7 +69,7 @@ const Profile = () => {
         })
         .catch(err => console.error('Failed to load other admins:', err));
     }
-  }, [currentAdmin]);
+  }, [currentAdmin?.role, currentAdmin?.id]);
 
   // Sync role state when currentAdmin profile changes
   useEffect(() => {
