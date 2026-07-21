@@ -17,9 +17,10 @@ const ServiceCard = ({ service }) => {
   const hasPrice = price !== undefined && price !== null && price !== '' && parseFloat(price) > 0;
   const formattedPrice = hasPrice ? `$${parseFloat(price).toFixed(2)}` : 'Contact Us';
 
-  // Helper to resolve images (either relative backend uploads or external URLs)
+  // Helper to resolve images (either Base64 string, relative backend uploads, or external URLs)
   const getServiceImage = () => {
-    if (!imageUrl) return '/uploads/logo.jpg';
+    if (service.imageBase64) return service.imageBase64;
+    if (!imageUrl) return 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=600&auto=format&fit=crop';
     if (imageUrl.startsWith('http')) return imageUrl;
     // Prefix relative paths with Express server base URL
     return `${ASSET_BASE_URL}${imageUrl}`;

@@ -20,7 +20,7 @@ const ManageProducts = () => {
   const [category, setCategory] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
-  const [imageFile, setImageFile] = useState(null);
+  const [imageBase64, setImageBase64] = useState('');
   const [imagePreview, setImagePreview] = useState('');
 
   // Delete Confirmation State
@@ -60,7 +60,7 @@ const ManageProducts = () => {
     setCategory('');
     setDescription('');
     setPrice('');
-    setImageFile(null);
+    setImageBase64('');
     setImagePreview('');
     setError('');
     setIsModalOpen(true);
@@ -73,18 +73,52 @@ const ManageProducts = () => {
     setCategory(product.category);
     setDescription(product.description);
     setPrice(product.price !== null && product.price !== undefined ? product.price : '');
-    setImageFile(null);
-    setImagePreview(product.imageUrl ? (product.imageUrl.startsWith('http') ? product.imageUrl : `${API_BASE_URL.replace('/api', '')}${product.imageUrl}`) : '');
+    setImageBase64('');
+    setImagePreview(product.imageBase64 || product.imageUrl || '');
     setError('');
     setIsModalOpen(true);
   };
 
-  // Image Selection Handler
+  // Image Selection and Compression Handler (Base64)
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setImageFile(file);
-      setImagePreview(URL.createObjectURL(file));
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const img = new Image();
+        img.onload = () => {
+          // Resize settings
+          const MAX_WIDTH = 800;
+          const MAX_HEIGHT = 800;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height) {
+            if (width > MAX_WIDTH) {
+              height *= MAX_WIDTH / width;
+              width = MAX_WIDTH;
+            }
+          } else {
+            if (height > MAX_HEIGHT) {
+              width *= MAX_HEIGHT / height;
+              height = MAX_HEIGHT;
+            }
+          }
+
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          
+          // Compress to JPEG with 0.7 quality
+          const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+          setImageBase64(dataUrl);
+          setImagePreview(dataUrl);
+        };
+        img.src = event.target.result;
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -99,23 +133,20 @@ const ManageProducts = () => {
       return;
     }
 
-    if (!isEditMode && !imageFile) {
-      setError('Product image file is required.');
+    if (!isEditMode && !imageBase64) {
+      setError('Product image is required.');
       return;
     }
 
-    // Build FormData object
-    const formData = new FormData();
-    formData.append('name', name);
-    formData.append('category', category);
-    formData.append('description', description);
-    if (price) {
-      formData.append('price', price);
-    } else {
-      formData.append('price', '');
-    }
-    if (imageFile) {
-      formData.append('image', imageFile);
+    const payload = {
+      name,
+      category,
+      description,
+      price: price ? price : null
+    };
+
+    if (imageBase64) {
+      payload.imageBase64 = imageBase64;
     }
 
     try {
@@ -129,8 +160,9 @@ const ManageProducts = () => {
         method,
         headers: {
           'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
         },
-        body: formData,
+        body: JSON.stringify(payload),
       });
 
       // Defensive check for HTML response
@@ -188,6 +220,16 @@ const ManageProducts = () => {
     }
   };
 
+  // Helper to render image thumbnails in table
+  const getThumbnailUrl = (product) => {
+    if (product.imageBase64) return product.imageBase64;
+    if (product.imageUrl) {
+      if (product.imageUrl.startsWith('http')) return product.imageUrl;
+      return `${API_BASE_URL.replace('/api', '')}${product.imageUrl}`;
+    }
+    return 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=100&auto=format&fit=crop';
+  };
+
   return (
     <div className="manage-services animate-fade-in">
       <div className="admin-panel-card">
@@ -243,7 +285,7 @@ const ManageProducts = () => {
                   <tr key={product.id}>
                     <td data-label="Image">
                       <img 
-                        src={product.imageUrl ? (product.imageUrl.startsWith('http') ? product.imageUrl : `${API_BASE_URL.replace('/api', '')}${product.imageUrl}`) : 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=100&auto=format&fit=crop'} 
+                        src={getThumbnailUrl(product)} 
                         alt={product.name} 
                         style={{ width: '45px', height: '45px', borderRadius: '8px', objectFit: 'cover', border: '1px solid var(--admin-border)' }}
                         onError={(e) => {
@@ -365,8 +407,8 @@ const ManageProducts = () => {
                 style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0, cursor: 'pointer' }}
               />
               <UploadCloud size={32} style={{ color: 'var(--admin-text-muted)', marginBottom: '8px' }} />
-              <p style={{ fontSize: '0.8rem', fontWeight: 'bold' }}>Click or Drag Image Here</p>
-              <p className="text-muted" style={{ fontSize: '0.7rem', marginTop: '2px' }}>PNG, JPG, JPEG or WEBP (Max. 5MB)</p>
+              <p style={{ fontSize: '0.8rem', fontWeight: 'bold' }}>{imageBase64 ? 'Image ready (Base64)' : 'Click or Drag Image Here'}</p>
+              <p className="text-muted" style={{ fontSize: '0.7rem', marginTop: '2px' }}>PNG, JPG, JPEG or WEBP</p>
             </div>
             {imagePreview && (
               <div style={{ marginTop: '12px', textAlign: 'center' }}>

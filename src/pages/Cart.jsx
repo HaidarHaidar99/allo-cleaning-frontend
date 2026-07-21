@@ -10,11 +10,12 @@ const Cart = () => {
   const { cart, removeFromCart, cartTotal, clearCart } = useCart();
   const { settings } = useSettings();
 
-  // Helper to resolve images (either relative backend uploads or external URLs)
-  const getServiceImage = (imageUrl) => {
-    if (!imageUrl) return '/uploads/logo.jpg';
-    if (imageUrl.startsWith('http')) return imageUrl;
-    return `${ASSET_BASE_URL}${imageUrl}`;
+  // Helper to resolve images (either Base64, relative backend uploads or external URLs)
+  const getServiceImage = (item) => {
+    if (item.imageBase64) return item.imageBase64;
+    if (!item.imageUrl) return 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=600&auto=format&fit=crop';
+    if (item.imageUrl.startsWith('http')) return item.imageUrl;
+    return `${ASSET_BASE_URL}${item.imageUrl}`;
   };
 
   // Cart-wide Checkout "Buy Now" WhatsApp Link Generator
@@ -75,7 +76,7 @@ Thank you.`;
               <div key={item.id} className="cart-item glass-card">
                 <div className="cart-item-image">
                   <img 
-                    src={getServiceImage(item.imageUrl)} 
+                    src={getServiceImage(item)} 
                     alt={item.name}
                     onError={(e) => {
                       e.target.onerror = null;

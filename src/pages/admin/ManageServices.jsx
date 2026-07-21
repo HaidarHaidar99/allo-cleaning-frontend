@@ -18,7 +18,7 @@ const ManageServices = () => {
   
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [imageFile, setImageFile] = useState(null);
+  const [imageBase64, setImageBase64] = useState('');
   const [imagePreview, setImagePreview] = useState('');
 
   // Delete Confirmation State
@@ -49,7 +49,7 @@ const ManageServices = () => {
     setSelectedServiceId(null);
     setName('');
     setDescription('');
-    setImageFile(null);
+    setImageBase64('');
     setImagePreview('');
     setError('');
     setIsModalOpen(true);
@@ -60,18 +60,52 @@ const ManageServices = () => {
     setSelectedServiceId(service.id);
     setName(service.name);
     setDescription(service.description);
-    setImageFile(null);
-    setImagePreview(service.imageUrl ? (service.imageUrl.startsWith('http') ? service.imageUrl : `${API_BASE_URL.replace('/api', '')}${service.imageUrl}`) : '');
+    setImageBase64('');
+    setImagePreview(service.imageBase64 || service.imageUrl || '');
     setError('');
     setIsModalOpen(true);
   };
 
-  // Image Selection Handler
+  // Image Selection and Compression Handler (Base64)
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setImageFile(file);
-      setImagePreview(URL.createObjectURL(file));
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const img = new Image();
+        img.onload = () => {
+          // Resize settings
+          const MAX_WIDTH = 800;
+          const MAX_HEIGHT = 800;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height) {
+            if (width > MAX_WIDTH) {
+              height *= MAX_WIDTH / width;
+              width = MAX_WIDTH;
+            }
+          } else {
+            if (height > MAX_HEIGHT) {
+              width *= MAX_HEIGHT / height;
+              height = MAX_HEIGHT;
+            }
+          }
+
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          
+          // Compress to JPEG with 0.7 quality
+          const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+          setImageBase64(dataUrl);
+          setImagePreview(dataUrl);
+        };
+        img.src = event.target.result;
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -86,17 +120,18 @@ const ManageServices = () => {
       return;
     }
 
-    if (!isEditMode && !imageFile) {
-      setError('Service image file is required.');
+    if (!isEditMode && !imageBase64) {
+      setError('Service image is required.');
       return;
     }
 
-    // Build FormData object
-    const formData = new FormData();
-    formData.append('name', name);
-    formData.append('description', description);
-    if (imageFile) {
-      formData.append('image', imageFile);
+    const payload = {
+      name,
+      description,
+    };
+    
+    if (imageBase64) {
+      payload.imageBase64 = imageBase64;
     }
 
     try {
@@ -110,9 +145,9 @@ const ManageServices = () => {
         method,
         headers: {
           'Authorization': `Bearer ${token}`,
-          // Note: Do NOT set Content-Type header when sending FormData!
+          'Content-Type': 'application/json',
         },
-        body: formData,
+        body: JSON.stringify(payload),
       });
 
       const data = await response.json();
@@ -162,10 +197,13 @@ const ManageServices = () => {
   };
 
   // Helper to render image thumbnails in table
-  const getThumbnailUrl = (imageUrl) => {
-    if (!imageUrl) return '/uploads/logo.jpg';
-    if (imageUrl.startsWith('http')) return imageUrl;
-    return `${API_BASE_URL.replace('/api', '')}${imageUrl}`;
+  const getThumbnailUrl = (service) => {
+    if (service.imageBase64) return service.imageBase64;
+    if (service.imageUrl) {
+      if (service.imageUrl.startsWith('http')) return service.imageUrl;
+      return `${API_BASE_URL.replace('/api', '')}${service.imageUrl}`;
+    }
+    return 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=100&auto=format&fit=crop';
   };
 
   return (
@@ -218,7 +256,7 @@ const ManageServices = () => {
                   <tr key={service.id}>
                     <td data-label="Image">
                       <img 
-                        src={getThumbnailUrl(service.imageUrl)} 
+                        src={getThumbnailUrl(service)} 
                         alt={service.name} 
                         style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '4px', border: '1px solid var(--admin-border)' }}
                         onError={(e) => {
@@ -293,7 +331,7 @@ const ManageServices = () => {
               />
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', color: 'var(--admin-text-light)' }}>
                 <UploadCloud size={24} />
-                <span style={{ fontSize: '0.8rem', fontWeight: 650 }}>{imageFile ? imageFile.name : 'Choose file or drag here'}</span>
+                <span style={{ fontSize: '0.8rem', fontWeight: 650 }}>{imageBase64 ? 'Image ready (Base64)' : 'Choose file or drag here'}</span>
               </div>
             </div>
           </div>
