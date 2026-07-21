@@ -58,13 +58,9 @@ Thank you.`;
   return (
     <div className="cart-page container animate-fade-in">
       {/* Header */}
-      <div className="cart-header text-center">
-        <div className="cart-tag">
-          <ShoppingCart size={16} className="text-cyan animate-pulse" />
-          <span>Your Bookings</span>
-        </div>
-        <h1>Your Shopping Cart</h1>
-        <p>Review the cleaning packages you have selected. You can add or remove services before finalizing your booking request.</p>
+      <div className="cart-header" style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '30px' }}>
+        <ShoppingCart size={28} className="text-cyan" />
+        <h1 style={{ margin: 0, fontSize: '2rem' }}>Cart</h1>
       </div>
 
       {/* Cart Grid Layout */}
@@ -143,15 +139,11 @@ Thank you.`;
           </div>
         </div>
       ) : (
-        <div className="no-cart-box text-center glass-card">
-          <div className="cart-icon-wrapper">
-            <ShoppingCart size={48} className="text-light" />
-          </div>
-          <h3>Your Cart is Empty</h3>
-          <p>You haven't added any cleaning services to your cart yet. Visit our services page to explore our offers!</p>
-          <Link to="/services" className="btn btn-primary">
-            <span>Explore Services</span>
-            <ArrowRight size={16} />
+        <div className="no-cart-box text-center" style={{ padding: '40px 0' }}>
+          <p style={{ color: 'var(--text-light)', marginBottom: '15px' }}>Your cart is currently empty.</p>
+          <Link to="/" className="btn btn-outline btn-small" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+            <ArrowLeft size={14} />
+            <span>Go Back</span>
           </Link>
         </div>
       )}

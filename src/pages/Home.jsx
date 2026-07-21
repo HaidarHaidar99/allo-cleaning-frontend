@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Sparkles, Shield, Compass, CheckCircle, ArrowRight, Award, Smile } from 'lucide-react';
 import Services from './Services';
+import Products from './Products';
 import Contact from './Contact';
 import { useSettings } from '../context/SettingsContext';
 import '../styles/Home.css';
@@ -69,9 +70,18 @@ const Home = () => {
       </section>
 
       {/* 3. Services Section */}
-      <section id="services-section" className="section" style={{ borderTop: '1px solid var(--border-color)', backgroundColor: 'var(--bg-light)' }}>
-        <Services />
-      </section>
+      {settings?.activePages?.services && (
+        <section id="services-section" className="section" style={{ borderTop: '1px solid var(--border-color)', backgroundColor: 'var(--bg-light)' }}>
+          <Services />
+        </section>
+      )}
+
+      {/* 3.5 Products Section */}
+      {settings?.activePages?.products && (
+        <section id="products-section" className="section" style={{ borderTop: '1px solid var(--border-color)', backgroundColor: 'var(--bg-white)' }}>
+          <Products />
+        </section>
+      )}
 
       {/* 4. Why Choose Us Section */}
       <section className="why-choose-us section">
@@ -126,9 +136,11 @@ const Home = () => {
       </section>
 
       {/* 5. Contact Section */}
-      <section id="contact-section" className="section" style={{ borderTop: '1px solid var(--border-color)', backgroundColor: 'var(--bg-white)' }}>
-        <Contact />
-      </section>
+      {settings?.activePages?.contact && (
+        <section id="contact-section" className="section" style={{ borderTop: '1px solid var(--border-color)', backgroundColor: 'var(--bg-white)' }}>
+          <Contact />
+        </section>
+      )}
     </div>
   );
 };

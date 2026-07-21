@@ -582,8 +582,8 @@ const ManageSettings = () => {
                         display: 'flex',
                         alignItems: 'center',
                         gap: '6px',
-                        backgroundColor: formData.activePages[page] ? 'var(--color-primary)' : 'var(--admin-border)',
-                        color: formData.activePages[page] ? '#fff' : 'var(--admin-text-muted)',
+                        backgroundColor: formData.activePages[page] ? '#10b981' : 'var(--border-color)',
+                        color: formData.activePages[page] ? '#000000' : 'var(--text-muted)',
                         transition: 'all 0.2s ease'
                       }}
                     >

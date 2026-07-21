@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
+import { API_BASE_URL } from '../config';
 
 const CartContext = createContext();
 
@@ -11,6 +12,29 @@ export const CartProvider = ({ children }) => {
   useEffect(() => {
     localStorage.setItem('allo_cleaning_cart', JSON.stringify(cart));
   }, [cart]);
+
+  // Validation: Auto-remove cart items if they were deleted from the database
+  useEffect(() => {
+    Promise.all([
+      fetch(`${API_BASE_URL}/services`).then(res => res.json()).catch(() => []),
+      fetch(`${API_BASE_URL}/products`).then(res => res.json()).catch(() => [])
+    ]).then(([services, products]) => {
+      if (Array.isArray(services) && Array.isArray(products)) {
+        const validIds = new Set([
+          ...services.map(s => s.id),
+          ...products.map(p => p.id)
+        ]);
+        
+        setCart(prev => {
+          const filtered = prev.filter(item => validIds.has(item.id));
+          if (filtered.length !== prev.length) {
+            console.log("Removed deleted items from cart");
+          }
+          return filtered;
+        });
+      }
+    });
+  }, []);
 
   const addToCart = (service) => {
     setCart((prevCart) => {

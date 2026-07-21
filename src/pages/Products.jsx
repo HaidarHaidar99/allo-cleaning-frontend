@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import ServiceCard from '../components/ServiceCard';
+import ProductCard from '../components/ProductCard';
 import { Sparkles } from 'lucide-react';
 import { API_BASE_URL } from '../config';
 import '../styles/Services.css';
 
-const Services = () => {
-  const [services, setServices] = useState([]);
+const Products = () => {
+  const [products, setProducts] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
   const [categories, setCategories] = useState(['All']);
   const [selectedCategory, setSelectedCategory] = useState('All');
@@ -18,30 +18,30 @@ const Services = () => {
 
   useEffect(() => {
     setLoading(true);
-    fetch(`${API_BASE_URL}/services`)
+    fetch(`${API_BASE_URL}/products`)
       .then((res) => res.json())
-      .then((servicesData) => {
-        if (Array.isArray(servicesData)) {
-          setServices(servicesData);
+      .then((productsData) => {
+        if (Array.isArray(productsData)) {
+          setProducts(productsData);
         }
         setLoading(false);
       })
       .catch((err) => {
-        console.error('Error fetching services data:', err);
+        console.error('Error fetching products data:', err);
         setLoading(false);
       });
   }, []);
 
-  // Update categories when services change
+  // Update categories
   useEffect(() => {
-    const uniqueCategories = ['All', ...new Set(services.map((item) => item.category))];
+    const uniqueCategories = ['All', ...new Set(products.map((item) => item.category))];
     setCategories(uniqueCategories);
     setSelectedCategory('All');
-  }, [services]);
+  }, [products]);
 
   // Filter and sort active items
   useEffect(() => {
-    let filtered = [...services];
+    let filtered = [...products];
 
     if (selectedCategory !== 'All') {
       filtered = filtered.filter((item) => item.category === selectedCategory);
@@ -68,7 +68,7 @@ const Services = () => {
     }
 
     setFilteredItems(filtered);
-  }, [services, selectedCategory, searchQuery, sortBy]);
+  }, [products, selectedCategory, searchQuery, sortBy]);
 
   return (
     <div className="services-page container animate-fade-in">
@@ -76,10 +76,10 @@ const Services = () => {
       <div className="services-header text-center">
         <div className="services-tag">
           <Sparkles size={16} className="text-cyan animate-pulse" />
-          <span>Our Cleaning Services</span>
+          <span>Our Cleaning Products</span>
         </div>
-        <h1>Explore Our Professional Services</h1>
-        <p>Compare prices, browse categories, and select the perfect cleaning solutions. Book instantly or add to your favorites.</p>
+        <h1>Browse Our Premium Cleaning Products</h1>
+        <p>High-quality, eco-friendly cleaning supplies and equipment recommended by our professionals. Purchase directly or add to your cart.</p>
       </div>
 
       {/* Filter and Sort Control Bar */}
@@ -123,17 +123,17 @@ const Services = () => {
       ) : filteredItems.length > 0 ? (
         <div className="services-grid">
           {filteredItems.map((item) => (
-            <ServiceCard key={item.id} service={item} />
+            <ProductCard key={item.id} product={item} />
           ))}
         </div>
       ) : (
         <div className="no-services-box text-center glass-card">
-          <h3>No Services Found</h3>
-          <p>We couldn't find any services matching the selected criteria. Try resetting filters!</p>
+          <h3>No Products Found</h3>
+          <p>We couldn't find any products matching the selected criteria. Try resetting filters!</p>
         </div>
       )}
     </div>
   );
 };
 
-export default Services;
+export default Products;

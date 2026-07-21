@@ -80,7 +80,10 @@ const Navbar = () => {
           </div>
           
           <Link to="/" className="navbar-logo logo-desktop" onClick={closeMobileMenu}>
-            <img src="/images/icone.jpg" alt="Allo Cleaning Logo" className="logo-image" />
+            <div className="text-logo">
+              <span className="text-logo-top">Allo</span>
+              <span className="text-logo-bottom">Cleaning</span>
+            </div>
           </Link>
         </div>
 
@@ -100,13 +103,18 @@ const Navbar = () => {
           </form>
 
           <Link to="/" className="navbar-logo logo-mobile" onClick={closeMobileMenu}>
-            <img src="/images/icone.jpg" alt="Allo Cleaning Logo" className="logo-image" />
+            <div className="text-logo">
+              <span className="text-logo-top">Allo</span>
+              <span className="text-logo-bottom">Cleaning</span>
+            </div>
           </Link>
         </div>
 
         {/* Right: Menu links (Desktop) or Action Icons (Mobile) */}
         <div className="nav-right">
-          <ul className={`navbar-links ${mobileMenuOpen ? 'mobile-open' : ''}`}>
+          {mobileMenuOpen && <div className="mobile-drawer-overlay" onClick={closeMobileMenu}></div>}
+          <div className={`mobile-drawer-wrapper ${mobileMenuOpen ? 'mobile-open' : ''}`}>
+            <ul className="navbar-links">
             {activePages.home && (
               <li>
                 <Link to="/" className={isActive('/')} onClick={closeMobileMenu}>Home</Link>
@@ -159,21 +167,14 @@ const Navbar = () => {
                 </Link>
               </li>
             )}
-          </ul>
+            </ul>
+          </div>
 
           {/* Mobile Quick Action Icons */}
           <div className="mobile-action-icons">
             <button className="mobile-action-btn search-toggle" onClick={() => setShowMobileSearch(!showMobileSearch)}>
-              <Search size={20} />
+              <Search size={24} />
             </button>
-            <Link to="/favorites" className="mobile-action-btn favorite-btn-mobile" onClick={closeMobileMenu}>
-              <Heart size={20} />
-              {favorites.length > 0 && <span className="mobile-badge bg-green">{favorites.length}</span>}
-            </Link>
-            <Link to="/cart" className="mobile-action-btn cart-btn-mobile" onClick={closeMobileMenu}>
-              <ShoppingCart size={20} />
-              {cart.length > 0 && <span className="mobile-badge bg-cyan">{cart.length}</span>}
-            </Link>
           </div>
         </div>
       </div>
