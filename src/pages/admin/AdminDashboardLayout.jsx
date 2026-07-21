@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useLocation, Outlet } from 'react-router-dom';
 import { useAdminAuth } from '../../context/AdminAuthContext';
-import { LayoutDashboard, Sparkles, Inbox, Users, LogOut, UserCheck, Settings, Menu, X, Sun, Moon, Package, Phone, Layers } from 'lucide-react';
+import { LayoutDashboard, Sparkles, Inbox, Users, LogOut, UserCheck, Settings, Menu, X, Sun, Moon, Package, Phone, Layers, Share2 } from 'lucide-react';
 import '../../styles/AdminDashboard.css';
 
 const getAvatarColor = (email) => {
@@ -178,8 +178,8 @@ const AdminDashboardLayout = () => {
             )}
             <li>
               <Link to="/admin/dashboard/settings" className={isTabActive('/admin/dashboard/settings')}>
-                <Phone size={18} />
-                <span>Contact</span>
+                <Share2 size={18} />
+                <span>Socials</span>
               </Link>
             </li>
             <li>

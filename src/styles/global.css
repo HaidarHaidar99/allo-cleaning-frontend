@@ -1,48 +1,52 @@
 /* Global Styles and Design System for Allo Cleaning */
 
 :root {
-  /* Color Palette - Vibrant Indigo/Cyan Gradient Theme */
-  --primary-dark: #090d16;       /* Ink Dark */
-  --primary-slate: #1c2333;      /* Dark Slate */
-  --accent-cyan: #06b6d4;        /* Vivid Cyan */
-  --accent-cyan-hover: #0891b2;
-  --accent-cyan-light: #ecfeff;
-  --accent-purple: #7c3aed;      /* Vivid Purple/Violet */
-  --accent-purple-hover: #6d28d9;
-  --accent-purple-light: #f5f3ff;
-  --accent-green: #10b981;       /* Emerald Mint */
+  /* Color Palette - Luxurious & Trendy Minimalist Theme */
+  --primary-dark: #0a0f1c;       /* Rich Midnight Blue */
+  --primary-slate: #1e293b;      /* Deep Slate */
+  --accent-cyan: #0ea5e9;        /* Premium Ocean Blue */
+  --accent-cyan-hover: #0284c7;
+  --accent-cyan-light: #e0f2fe;
+  --accent-purple: #8b5cf6;      /* Elegant Violet */
+  --accent-purple-hover: #7c3aed;
+  --accent-purple-light: #f3e8ff;
+  --accent-green: #10b981;       /* Emerald */
   --accent-green-hover: #059669;
   --accent-green-light: #d1fae5;
-  --bg-light: #f8fafc;           /* clean white gray */
+  
+  --bg-light: #fafafa;           /* Ultra Clean White/Gray */
   --bg-white: #ffffff;
+  
   --text-dark: #0f172a;
   --text-medium: #334155;
   --text-light: #64748b;
   --text-muted: #94a3b8;
   
-  /* Borders and Shadows */
-  --border-color: #e2e8f0;
-  --border-light: #f1f5f9;
-  --radius-sm: 6px;
-  --radius-md: 12px;
-  --radius-lg: 20px;
+  /* Borders and Premium Shadows */
+  --border-color: rgba(226, 232, 240, 0.8);
+  --border-light: rgba(241, 245, 249, 0.8);
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
   --radius-full: 9999px;
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
   
-  /* Glassmorphism */
-  --glass-bg: rgba(255, 255, 255, 0.85);
-  --glass-border: rgba(255, 255, 255, 0.4);
-  --glass-blur: blur(10px);
+  /* Luxurious Soft Shadows */
+  --shadow-sm: 0 2px 4px rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 8px 20px rgba(15, 23, 42, 0.06);
+  --shadow-lg: 0 16px 32px rgba(15, 23, 42, 0.08);
+  --shadow-xl: 0 24px 48px rgba(15, 23, 42, 0.12);
+  
+  /* Glassmorphism - Premium Frosted Glass */
+  --glass-bg: rgba(255, 255, 255, 0.75);
+  --glass-border: rgba(255, 255, 255, 0.6);
+  --glass-blur: blur(16px);
   
   /* Layout Transitions */
-  --transition-fast: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-normal: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-fast: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+  --transition-normal: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
   
   /* Container Widths */
-  --max-width: 1200px;
+  --max-width: 1280px;
 }
 
 /* Base resets */
@@ -244,14 +248,20 @@ textarea.form-control {
   resize: vertical;
 }
 
-/* Glassmorphic card styling */
+/* Glassmorphic card styling - Premium Refinement */
 .glass-card {
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
   border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition-normal);
+}
+
+.glass-card:hover {
   box-shadow: var(--shadow-md);
+  transform: translateY(-3px);
 }
 
 /* Alert Boxes */

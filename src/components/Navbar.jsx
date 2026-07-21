@@ -3,7 +3,8 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useFavorites } from '../context/FavoritesContext';
 import { useAdminAuth } from '../context/AdminAuthContext';
-import { Sparkles, Heart, ShoppingCart, User, LogOut, Menu, X, Search } from 'lucide-react';
+import { useSettings } from '../context/SettingsContext';
+import { Sparkles, Heart, ShoppingCart, User, LogOut, Menu, X, Search, Layers, Package } from 'lucide-react';
 import '../styles/Navbar.css';
 
 const getAvatarColor = (email) => {
@@ -23,11 +24,14 @@ const Navbar = () => {
   const { cart } = useCart();
   const { favorites } = useFavorites();
   const { admin, logout } = useAdminAuth();
+  const { settings } = useSettings();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [showMobileSearch, setShowMobileSearch] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  
+  const activePages = settings?.activePages || { home: true, products: true, services: true, contact: true };
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
@@ -103,18 +107,35 @@ const Navbar = () => {
         {/* Right: Menu links (Desktop) or Action Icons (Mobile) */}
         <div className="nav-right">
           <ul className={`navbar-links ${mobileMenuOpen ? 'mobile-open' : ''}`}>
-            <li>
-              <Link to="/" className={isActive('/')} onClick={closeMobileMenu}>Home</Link>
-            </li>
-            <li>
-              <Link 
-                to="/#services-section" 
-                className={location.hash === '#services-section' ? 'active' : ''}
-                onClick={(e) => handleNavClick('services-section', e)}
-              >
-                Services
-              </Link>
-            </li>
+            {activePages.home && (
+              <li>
+                <Link to="/" className={isActive('/')} onClick={closeMobileMenu}>Home</Link>
+              </li>
+            )}
+            {activePages.services && (
+              <li>
+                <Link 
+                  to="/#services-section" 
+                  className={location.hash === '#services-section' ? 'active' : ''}
+                  onClick={(e) => handleNavClick('services-section', e)}
+                >
+                  <Layers size={16} style={{ display: 'inline', marginRight: '4px', verticalAlign: 'text-bottom' }}/>
+                  Services
+                </Link>
+              </li>
+            )}
+            {activePages.products && (
+              <li>
+                <Link 
+                  to="/#products-section" 
+                  className={location.hash === '#products-section' ? 'active' : ''}
+                  onClick={(e) => handleNavClick('products-section', e)}
+                >
+                  <Package size={16} style={{ display: 'inline', marginRight: '4px', verticalAlign: 'text-bottom' }}/>
+                  Products
+                </Link>
+              </li>
+            )}
             <li>
               <Link to="/favorites" className={`nav-text-link ${isActive('/favorites')}`} onClick={closeMobileMenu}>
                 <span>Favorites</span>
@@ -127,48 +148,16 @@ const Navbar = () => {
                 {cart.length > 0 && <span className="text-badge bg-cyan">{cart.length}</span>}
               </Link>
             </li>
-            <li>
-              <Link 
-                to="/#contact-section" 
-                className={location.hash === '#contact-section' ? 'active' : ''}
-                onClick={(e) => handleNavClick('contact-section', e)}
-              >
-                Contact Us
-              </Link>
-            </li>
-
-            {/* Admin Session Control */}
-            {admin && (
-              <>
-                <li className="admin-nav-item">
-                  <Link to="/admin/dashboard" className={`admin-link-btn ${isActive('/admin/dashboard')}`} onClick={closeMobileMenu} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <div 
-                      style={{
-                        backgroundColor: getAvatarColor(admin.email),
-                        width: '24px',
-                        height: '24px',
-                        borderRadius: '50%',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: '#fff',
-                        fontWeight: 'bold',
-                        fontSize: '0.75rem',
-                        flexShrink: 0
-                      }}
-                    >
-                      {admin.fullName ? admin.fullName.charAt(0).toUpperCase() : 'A'}
-                    </div>
-                    <span>Admin Panel</span>
-                  </Link>
-                </li>
-                <li>
-                  <button className="logout-btn" onClick={handleLogout}>
-                    <LogOut size={16} />
-                    <span>Logout</span>
-                  </button>
-                </li>
-              </>
+            {activePages.contact && (
+              <li>
+                <Link 
+                  to="/#contact-section" 
+                  className={location.hash === '#contact-section' ? 'active' : ''}
+                  onClick={(e) => handleNavClick('contact-section', e)}
+                >
+                  Contact Us
+                </Link>
+              </li>
             )}
           </ul>
 

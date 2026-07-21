@@ -1,13 +1,11 @@
 import React from 'react';
-import { Heart, ShoppingCart, Send } from 'lucide-react';
-import { useCart } from '../context/CartContext';
+import { Heart, Send, MessageCircle } from 'lucide-react';
 import { useFavorites } from '../context/FavoritesContext';
 import { ASSET_BASE_URL } from '../config';
 import { useSettings } from '../context/SettingsContext';
 import '../styles/ServiceCard.css';
 
 const ServiceCard = ({ service }) => {
-  const { addToCart, removeFromCart, isInCart } = useCart();
   const { toggleFavorite, isFavorite } = useFavorites();
   const { settings } = useSettings();
 
@@ -55,7 +53,6 @@ Thank you.`;
     window.open(whatsappUrl, '_blank');
   };
 
-  const inCart = isInCart(id);
   const favorited = isFavorite(id);
 
   return (
@@ -96,31 +93,10 @@ Thank you.`;
           </div>
 
           <div className="service-actions">
-            {/* Cart Button */}
-            {inCart ? (
-              <button 
-                className="cart-toggle-btn in-cart" 
-                onClick={() => removeFromCart(id)}
-                title="Remove from Cart"
-              >
-                <ShoppingCart size={18} />
-                <span>In Cart</span>
-              </button>
-            ) : (
-              <button 
-                className="cart-toggle-btn" 
-                onClick={() => addToCart(service)}
-                title="Add to Cart"
-              >
-                <ShoppingCart size={18} />
-                <span>Add to Cart</span>
-              </button>
-            )}
-
-            {/* Buy Now Button */}
-            <button className="buy-now-btn" onClick={handleBuyNow}>
-              <Send size={16} />
-              <span>Buy Now</span>
+            {/* Contact Us Button */}
+            <button className="buy-now-btn" onClick={handleBuyNow} style={{ width: '100%', justifyContent: 'center' }}>
+              <MessageCircle size={16} />
+              <span>Contact Us</span>
             </button>
           </div>
         </div>

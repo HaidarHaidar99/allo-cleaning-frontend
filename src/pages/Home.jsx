@@ -11,33 +11,33 @@ const Home = () => {
 
   return (
     <div className="home-page animate-fade-in">
-      {/* 1. Hero Section */}
-      <header className="hero-section">
-        <div className="hero-container container">
-          <div className="hero-content">
-            <div className="hero-tag">
+      {/* 1. Full Screen Hero Section */}
+      <header 
+        className="hero-section full-screen"
+        style={{ 
+          backgroundImage: settings.heroImageBase64 
+            ? `url(${settings.heroImageBase64})` 
+            : 'url(https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=1920&auto=format&fit=crop)'
+        }}
+      >
+        <div className="hero-overlay"></div>
+        <div className="hero-container-full container">
+          <div className="hero-content-full animate-fade-in-up">
+            <div className="hero-tag-full">
               <Sparkles size={16} className="text-cyan animate-pulse" />
               <span>{settings.heroTag}</span>
             </div>
-            <h1>{settings.heroTitle}</h1>
-            <p>{settings.heroDescription}</p>
-            <div className="hero-actions">
-              <a href="#services-section" className="btn btn-primary">
-                <span>Explore Services</span>
+            <h1 className="hero-title-full">{settings.heroTitle}</h1>
+            <p className="hero-desc-full">{settings.heroDescription}</p>
+            <div className="hero-actions-full">
+              <a href="#services-section" className="btn btn-primary btn-lg">
+                <span>Explore Now</span>
                 <ArrowRight size={18} />
               </a>
-              <a href="#contact-section" className="btn btn-outline">
-                <span>Book Appointment</span>
+              <a href="#contact-section" className="btn btn-outline-light btn-lg">
+                <span>Contact Us</span>
               </a>
             </div>
-          </div>
-          <div className="hero-visual">
-            <div className="blob-bg bg-cyan"></div>
-            <img 
-              src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=800&auto=format&fit=crop" 
-              alt="Professional Cleaning"
-              className="hero-img glass-card"
-            />
           </div>
         </div>
       </header>

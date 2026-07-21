@@ -3,7 +3,7 @@ import { useAdminAuth } from '../../context/AdminAuthContext';
 import { useSettings } from '../../context/SettingsContext';
 import { 
   Settings, Save, Globe, Smartphone, Mail, MapPin, 
-  Layout, Star, MessageSquare, AlertCircle, Check, Camera 
+  Layout, Star, MessageSquare, AlertCircle, Check, Camera, Image as ImageIcon, Eye, EyeOff
 } from 'lucide-react';
 
 const Facebook = ({ size = 24, className = '', ...props }) => (
@@ -54,7 +54,14 @@ const ManageSettings = () => {
     stat4Number: '',
     stat4Label: '',
     contactTitle: '',
-    contactDescription: ''
+    contactDescription: '',
+    heroImageBase64: '',
+    activePages: {
+      home: true,
+      products: true,
+      services: true,
+      contact: true
+    }
   });
 
   // Populate form with current settings
@@ -79,7 +86,14 @@ const ManageSettings = () => {
         stat4Number: settings.stat4Number || '',
         stat4Label: settings.stat4Label || '',
         contactTitle: settings.contactTitle || '',
-        contactDescription: settings.contactDescription || ''
+        contactDescription: settings.contactDescription || '',
+        heroImageBase64: settings.heroImageBase64 || '',
+        activePages: settings.activePages || {
+          home: true,
+          products: true,
+          services: true,
+          contact: true
+        }
       });
     }
   }, [settings]);
@@ -90,6 +104,56 @@ const ManageSettings = () => {
       ...prev,
       [name]: value
     }));
+  };
+
+  const handlePageToggle = (pageName) => {
+    setFormData(prev => ({
+      ...prev,
+      activePages: {
+        ...prev.activePages,
+        [pageName]: !prev.activePages[pageName]
+      }
+    }));
+  };
+
+  // Canvas Image Compression for Hero Background
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const img = new Image();
+        img.onload = () => {
+          const MAX_WIDTH = 1920; // Allow larger for background
+          const MAX_HEIGHT = 1080;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height) {
+            if (width > MAX_WIDTH) {
+              height *= MAX_WIDTH / width;
+              width = MAX_WIDTH;
+            }
+          } else {
+            if (height > MAX_HEIGHT) {
+              width *= MAX_HEIGHT / height;
+              height = MAX_HEIGHT;
+            }
+          }
+
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          
+          const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
+          setFormData(prev => ({ ...prev, heroImageBase64: dataUrl }));
+        };
+        img.src = event.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -162,6 +226,13 @@ const ManageSettings = () => {
           >
             <MessageSquare size={16} />
             <span>Contact Page Content</span>
+          </button>
+          <button 
+            className={`settings-tab-btn ${activeTab === 'pages' ? 'active' : ''}`}
+            onClick={() => setActiveTab('pages')}
+          >
+            <Eye size={16} />
+            <span>Page Visibility</span>
           </button>
         </div>
 
@@ -326,6 +397,30 @@ const ManageSettings = () => {
                   />
                 </div>
 
+                <div className="form-group full-width">
+                  <label>Hero Background Image</label>
+                  <div className="image-upload-wrapper" style={{ border: '1.5px dashed var(--admin-border)', padding: '15px', borderRadius: '10px', textAlign: 'center', backgroundColor: 'var(--admin-bg)', position: 'relative' }}>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageChange}
+                      style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0, cursor: 'pointer' }}
+                    />
+                    <ImageIcon size={32} style={{ color: 'var(--admin-text-muted)', marginBottom: '8px' }} />
+                    <p style={{ fontSize: '0.8rem', fontWeight: 'bold' }}>{formData.heroImageBase64 ? 'Background Image Set (Base64)' : 'Click or Drag Image Here'}</p>
+                    <p className="text-muted" style={{ fontSize: '0.7rem', marginTop: '2px' }}>High-res JPG/WEBP recommended</p>
+                  </div>
+                  {formData.heroImageBase64 && (
+                    <div style={{ marginTop: '12px', textAlign: 'center' }}>
+                      <img 
+                        src={formData.heroImageBase64} 
+                        alt="Hero Preview" 
+                        style={{ maxWidth: '100%', maxHeight: '200px', borderRadius: '8px', border: '1px solid var(--admin-border)', objectFit: 'cover' }} 
+                      />
+                    </div>
+                  )}
+                </div>
+
                 {/* Stats row */}
                 <div className="form-group full-width" style={{ marginTop: '20px' }}>
                   <h4 style={{ fontSize: '1rem', marginBottom: '15px', color: 'var(--admin-text-main)', display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -460,6 +555,43 @@ const ManageSettings = () => {
                     required
                   />
                 </div>
+              </div>
+            </div>
+          )}
+
+          {/* Tab 4: Page Visibility Flags */}
+          {activeTab === 'pages' && (
+            <div className="settings-form-section animate-fade-in">
+              <h3 className="settings-section-title">Page Visibility Settings</h3>
+              <p className="settings-section-desc">Activate or deactivate public pages. Deactivating a page hides it from the user navigation, but data remains safe in the database.</p>
+              
+              <div className="admin-form" style={{ display: 'flex', flexDirection: 'column', gap: '15px', maxWidth: '400px' }}>
+                {Object.keys(formData.activePages).map(page => (
+                  <div key={page} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '15px', backgroundColor: 'var(--admin-bg)', borderRadius: '8px', border: '1px solid var(--admin-border)' }}>
+                    <span style={{ textTransform: 'capitalize', fontWeight: 'bold' }}>{page} Page</span>
+                    <button
+                      type="button"
+                      onClick={() => handlePageToggle(page)}
+                      style={{
+                        padding: '6px 12px',
+                        borderRadius: '20px',
+                        border: 'none',
+                        cursor: 'pointer',
+                        fontWeight: 'bold',
+                        fontSize: '0.8rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        backgroundColor: formData.activePages[page] ? 'var(--color-primary)' : 'var(--admin-border)',
+                        color: formData.activePages[page] ? '#fff' : 'var(--admin-text-muted)',
+                        transition: 'all 0.2s ease'
+                      }}
+                    >
+                      {formData.activePages[page] ? <Eye size={16} /> : <EyeOff size={16} />}
+                      {formData.activePages[page] ? 'Active' : 'Hidden'}
+                    </button>
+                  </div>
+                ))}
               </div>
             </div>
           )}
