@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
+import React, { createContext, useState, useEffect, useContext, useCallback, useMemo } from 'react';
 import { API_BASE_URL } from '../config';
 
 const AdminAuthContext = createContext();
@@ -11,22 +11,32 @@ export const AdminAuthProvider = ({ children }) => {
   });
   const [loading, setLoading] = useState(false);
 
-  // Set Authorization headers helper
-  const getAuthHeaders = () => ({
+  // Stable logout function — will NOT be recreated on every render
+  const logout = useCallback(() => {
+    setToken(null);
+    setAdmin(null);
+    localStorage.removeItem('allo_cleaning_admin_token');
+    localStorage.removeItem('allo_cleaning_admin_user');
+  }, []);
+
+  // Stable auth headers builder
+  const getAuthHeaders = useCallback(() => ({
     'Content-Type': 'application/json',
     'Authorization': `Bearer ${token}`,
-  });
+  }), [token]);
 
-  // Check token expiration periodically or on boot
+  // Validate token once on mount / when token changes
   useEffect(() => {
     if (token) {
-      // Validate token status using /api/auth/me
       fetch(`${API_BASE_URL}/auth/me`, {
-        headers: getAuthHeaders(),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
       })
         .then((res) => {
           if (res.status !== 200) {
-            logout(); // Auto-logout if token is expired/invalid/deleted (404)
+            logout();
           } else {
             return res.json();
           }
@@ -42,10 +52,10 @@ export const AdminAuthProvider = ({ children }) => {
           logout();
         });
     }
-  }, [token]);
+  }, [token, logout]);
 
   // Direct Admin Login (Email & Password)
-  const login = async (email, password) => {
+  const login = useCallback(async (email, password) => {
     setLoading(true);
     try {
       const response = await fetch(`${API_BASE_URL}/auth/login`, {
@@ -77,33 +87,25 @@ export const AdminAuthProvider = ({ children }) => {
       setLoading(false);
       throw error;
     }
-  };
-
-
-  const logout = () => {
-    setToken(null);
-    setAdmin(null);
-    localStorage.removeItem('allo_cleaning_admin_token');
-    localStorage.removeItem('allo_cleaning_admin_user');
-  };
+  }, []);
 
   // Fetch Admin Accounts (Admin only)
-  const fetchAdmins = async () => {
-    const res = await fetch(`${API_BASE_URL}/admins`, {
-      headers: getAuthHeaders(),
-    });
+  const fetchAdmins = useCallback(async () => {
+    const headers = getAuthHeaders();
+    const res = await fetch(`${API_BASE_URL}/admins`, { headers });
     if (!res.ok) {
       const err = await res.json();
       throw new Error(err.message || 'Failed to fetch admin accounts.');
     }
     return await res.json();
-  };
+  }, [getAuthHeaders]);
 
   // Create Admin directly
-  const createAdmin = async (adminData) => {
+  const createAdmin = useCallback(async (adminData) => {
+    const headers = getAuthHeaders();
     const res = await fetch(`${API_BASE_URL}/admins`, {
       method: 'POST',
-      headers: getAuthHeaders(),
+      headers,
       body: JSON.stringify(adminData),
     });
     const data = await res.json();
@@ -111,21 +113,24 @@ export const AdminAuthProvider = ({ children }) => {
       throw new Error(data.message || 'Failed to create admin account.');
     }
 
-    if (data.callerDemoted && admin) {
-      const updatedAdmin = { ...admin, role: 'Admin' };
-      setAdmin(updatedAdmin);
-      localStorage.setItem('allo_cleaning_admin_user', JSON.stringify(updatedAdmin));
+    if (data.callerDemoted) {
+      setAdmin(prev => {
+        if (!prev) return prev;
+        const updatedAdmin = { ...prev, role: 'Admin' };
+        localStorage.setItem('allo_cleaning_admin_user', JSON.stringify(updatedAdmin));
+        return updatedAdmin;
+      });
     }
 
     return data;
-  };
-
+  }, [getAuthHeaders]);
 
   // Update Admin Password (Admin only)
-  const updateAdminPassword = async (adminId, oldPassword, newPassword) => {
+  const updateAdminPassword = useCallback(async (adminId, oldPassword, newPassword) => {
+    const headers = getAuthHeaders();
     const res = await fetch(`${API_BASE_URL}/admins/${adminId}/password`, {
       method: 'PUT',
-      headers: getAuthHeaders(),
+      headers,
       body: JSON.stringify({ oldPassword, newPassword }),
     });
     const data = await res.json();
@@ -133,13 +138,14 @@ export const AdminAuthProvider = ({ children }) => {
       throw new Error(data.message || 'Failed to update password.');
     }
     return data;
-  };
+  }, [getAuthHeaders]);
 
   // Update Admin Profile Details (Admin only)
-  const updateAdminProfile = async (adminId, profileData) => {
+  const updateAdminProfile = useCallback(async (adminId, profileData) => {
+    const headers = getAuthHeaders();
     const res = await fetch(`${API_BASE_URL}/admins/${adminId}`, {
       method: 'PUT',
-      headers: getAuthHeaders(),
+      headers,
       body: JSON.stringify(profileData),
     });
     const data = await res.json();
@@ -147,58 +153,62 @@ export const AdminAuthProvider = ({ children }) => {
       throw new Error(data.message || 'Failed to update profile.');
     }
 
-    if (admin && adminId === admin.id) {
-      const updatedAdmin = { ...admin, ...profileData };
-      setAdmin(updatedAdmin);
-      localStorage.setItem('allo_cleaning_admin_user', JSON.stringify(updatedAdmin));
-    }
+    setAdmin(prev => {
+      if (prev && adminId === prev.id) {
+        const updatedAdmin = { ...prev, ...profileData };
+        localStorage.setItem('allo_cleaning_admin_user', JSON.stringify(updatedAdmin));
+        return updatedAdmin;
+      }
+      return prev;
+    });
 
     return data;
-  };
+  }, [getAuthHeaders]);
 
   // Delete Admin Account (Admin only)
-  const deleteAdmin = async (adminId) => {
+  const deleteAdmin = useCallback(async (adminId) => {
+    const headers = getAuthHeaders();
     const res = await fetch(`${API_BASE_URL}/admins/${adminId}`, {
       method: 'DELETE',
-      headers: getAuthHeaders(),
+      headers,
     });
     const data = await res.json();
     if (!res.ok) {
       throw new Error(data.message || 'Failed to delete admin account.');
     }
     return data;
-  };
+  }, [getAuthHeaders]);
 
   // Fetch Dashboard Stats (Admin only)
-  const fetchDashboardStats = async () => {
-    const res = await fetch(`${API_BASE_URL}/stats`, {
-      headers: getAuthHeaders(),
-    });
+  const fetchDashboardStats = useCallback(async () => {
+    const headers = getAuthHeaders();
+    const res = await fetch(`${API_BASE_URL}/stats`, { headers });
     if (!res.ok) {
       throw new Error('Failed to fetch dashboard stats.');
     }
     return await res.json();
-  };
+  }, [getAuthHeaders]);
+
+  // Memoize the context value so consumers don't re-render unless actual data changes
+  const contextValue = useMemo(() => ({
+    token,
+    admin,
+    setAdmin,
+    loading,
+    login,
+    logout,
+    fetchAdmins,
+    createAdmin,
+    updateAdminPassword,
+    updateAdminProfile,
+    deleteAdmin,
+    fetchDashboardStats,
+    getAuthHeaders,
+    API_BASE_URL,
+  }), [token, admin, loading, login, logout, fetchAdmins, createAdmin, updateAdminPassword, updateAdminProfile, deleteAdmin, fetchDashboardStats, getAuthHeaders]);
 
   return (
-    <AdminAuthContext.Provider
-      value={{
-        token,
-        admin,
-        setAdmin,
-        loading,
-        login,
-        logout,
-        fetchAdmins,
-        createAdmin,
-        updateAdminPassword,
-        updateAdminProfile,
-        deleteAdmin,
-        fetchDashboardStats,
-        getAuthHeaders,
-        API_BASE_URL,
-      }}
-    >
+    <AdminAuthContext.Provider value={contextValue}>
       {children}
     </AdminAuthContext.Provider>
   );

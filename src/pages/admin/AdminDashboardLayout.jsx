@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useLocation, Outlet } from 'react-router-dom';
 import { useAdminAuth } from '../../context/AdminAuthContext';
 import { LayoutDashboard, Sparkles, Inbox, Users, LogOut, UserCheck, Settings, Menu, X, Sun, Moon, Package, Phone, Layers } from 'lucide-react';
-import { API_BASE_URL } from '../../config';
 import '../../styles/AdminDashboard.css';
 
 const getAvatarColor = (email) => {
@@ -19,7 +18,7 @@ const getAvatarColor = (email) => {
 };
 
 const AdminDashboardLayout = () => {
-  const { token, admin, setAdmin, logout } = useAdminAuth();
+  const { token, admin, logout } = useAdminAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
@@ -41,39 +40,13 @@ const AdminDashboardLayout = () => {
     return () => document.body.classList.remove('admin-theme-dark');
   }, [theme]);
 
-  // Route security check: redirect if not authenticated or user deleted
+  // Route security check: redirect if not authenticated
+  // Token validation is handled by AdminAuthContext — no duplicate fetch needed
   useEffect(() => {
     if (!token) {
       navigate('/admin');
-      return;
     }
-
-    // Validate that the admin user still exists in the database
-    fetch(`${API_BASE_URL}/auth/me`, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    })
-      .then(res => {
-        if (res.status !== 200) {
-          logout();
-          navigate('/admin');
-          return null;
-        }
-        return res.json();
-      })
-      .then(data => {
-        if (data && data.admin) {
-          setAdmin(data.admin);
-          localStorage.setItem('allo_cleaning_admin_user', JSON.stringify(data.admin));
-        }
-      })
-      .catch((err) => {
-        console.error('Auth check error:', err);
-        logout();
-        navigate('/admin');
-      });
-  }, [token, navigate, logout, setAdmin]);
+  }, [token, navigate]);
 
   // Close mobile sidebar on route change
   useEffect(() => {
