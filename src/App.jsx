@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Outlet, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
-import OffersBanner from './components/OffersBanner';
 import Footer from './components/Footer';
 import { Home as HomeIcon, Phone as PhoneIcon, Layers, Package } from 'lucide-react';
 

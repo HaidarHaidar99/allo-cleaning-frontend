@@ -170,6 +170,15 @@ body.dark-theme .navbar {
 
 body.dark-theme .footer {
   background-color: #0b1120 !important;
+  border-top-color: var(--accent-cyan) !important;
+  color: #cbd5e1 !important;
+}
+
+body.dark-theme .footer-col h3 {
+  color: #f8fafc !important;
+}
+
+body.dark-theme .footer-bottom {
   border-top-color: rgba(255, 255, 255, 0.1) !important;
 }
 
@@ -185,6 +194,80 @@ body.dark-theme .glass-card-white {
 
 body.dark-theme .mobile-search-input-white {
   color: #f8fafc !important;
+}
+
+/* Dark mode: interactive elements, filter controls, form inputs, service badges */
+body.dark-theme .filter-select,
+body.dark-theme select,
+body.dark-theme .form-control {
+  background-color: #1e293b !important;
+  color: #f8fafc !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+body.dark-theme .filter-select option {
+  background-color: #1e293b;
+  color: #f8fafc;
+}
+
+body.dark-theme .service-badge {
+  background-color: rgba(14, 165, 233, 0.2) !important;
+  color: #38bdf8 !important;
+}
+
+body.dark-theme .favorite-btn {
+  background: rgba(30, 41, 59, 0.9) !important;
+  color: #94a3b8 !important;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+body.dark-theme .favorite-btn.favorited {
+  color: #ef4444 !important;
+}
+
+body.dark-theme .favorite-btn:hover {
+  color: #ef4444 !important;
+  background: rgba(30, 41, 59, 1) !important;
+}
+
+body.dark-theme .cart-toggle-btn {
+  border-color: rgba(255, 255, 255, 0.15) !important;
+  color: #cbd5e1 !important;
+}
+
+body.dark-theme .no-services-box {
+  background: #1e293b !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+body.dark-theme .modal-overlay,
+body.dark-theme .mobile-search-luxury-overlay {
+  background: rgba(0, 0, 0, 0.7) !important;
+}
+
+body.dark-theme .modal-content {
+  background: #1e293b !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+body.dark-theme .alert-success {
+  background-color: rgba(16, 185, 129, 0.15) !important;
+  color: #34d399 !important;
+  border-color: rgba(16, 185, 129, 0.3) !important;
+}
+
+body.dark-theme .alert-error {
+  background-color: rgba(239, 68, 68, 0.15) !important;
+  color: #f87171 !important;
+  border-color: rgba(239, 68, 68, 0.3) !important;
+}
+
+body.dark-theme .search-icon-inside {
+  color: #94a3b8 !important;
+}
+
+body.dark-theme .mobile-search-close-white:hover {
+  background-color: rgba(239, 68, 68, 0.2) !important;
 }
 
 /* Button Component */

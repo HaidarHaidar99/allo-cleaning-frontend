@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Heart, Eye } from 'lucide-react';
+import { Heart } from 'lucide-react';
 import { useFavorites } from '../context/FavoritesContext';
 import { useCart } from '../context/CartContext';
 import { ASSET_BASE_URL } from '../config';

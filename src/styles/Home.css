@@ -26,7 +26,6 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-attachment: fixed;
   opacity: 0;
   transition: opacity 1.2s cubic-bezier(0.25, 0.8, 0.25, 1);
   z-index: 0;
@@ -34,6 +33,11 @@
 
 .hero-bg-layer.active {
   opacity: 1;
+}
+
+/* Gradient fallback when no admin images are uploaded */
+.hero-gradient-fallback {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0ea5e9 100%) !important;
 }
 
 .hero-overlay {
@@ -120,7 +124,7 @@
 
 @media (max-width: 768px) {
   .hero-container-full {
-    transform: translateY(-30px); /* Positions buttons & content higher on mobile */
+    transform: translateY(-30px);
   }
   .hero-title-full {
     font-size: 2.5rem;
@@ -182,7 +186,7 @@
 
 @media (max-width: 768px) {
   .stats-container {
-    grid-template-columns: repeat(2, 1fr); /* 2 per row on mobile */
+    grid-template-columns: repeat(2, 1fr);
     gap: 12px;
   }
   .stat-card {
@@ -261,7 +265,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--bg-white);
+  color: #ffffff;
 }
 
 .bg-cyan { background-color: var(--accent-cyan); }
@@ -278,9 +282,30 @@
   line-height: 1.6;
 }
 
+/* Keep 2 columns on mobile for Why Choose section — same as stats */
 @media (max-width: 768px) {
   .why-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .why-card {
+    padding: 16px;
+    gap: 10px;
+  }
+  .why-card h3 {
+    font-size: 0.95rem;
+  }
+  .why-card p {
+    font-size: 0.8rem;
+    line-height: 1.4;
+  }
+  .why-icon-box {
+    width: 36px;
+    height: 36px;
+  }
+  .why-icon-box svg {
+    width: 18px;
+    height: 18px;
   }
 }
 

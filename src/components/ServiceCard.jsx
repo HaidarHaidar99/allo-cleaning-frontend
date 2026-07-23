@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Heart, Eye } from 'lucide-react';
+import { Heart } from 'lucide-react';
 import { useFavorites } from '../context/FavoritesContext';
 import { ASSET_BASE_URL } from '../config';
 import { useSettings } from '../context/SettingsContext';

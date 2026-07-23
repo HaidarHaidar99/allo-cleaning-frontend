@@ -12,17 +12,17 @@ const Home = () => {
   const { settings } = useSettings();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  // Compile active hero images ONLY from admin settings (no hardcoded unsplash fallbacks)
+  // Compile active hero images ONLY from admin settings
   const images = [];
   if (settings.heroImageBase64) images.push(settings.heroImageBase64);
   if (settings.heroImage2) images.push(settings.heroImage2);
   if (settings.heroImage3) images.push(settings.heroImage3);
 
-  // Active carousel if heroMode is carousel AND multiple images exist
-  const isCarousel = settings.heroMode === 'carousel' && images.length > 1;
+  // Carousel rotates if more than 1 image exists
+  const isCarousel = images.length > 1;
 
   useEffect(() => {
-    if (!isCarousel || images.length <= 1) return;
+    if (!isCarousel) return;
 
     const interval = setInterval(() => {
       setCurrentImageIndex((prev) => (prev + 1) % images.length);
@@ -35,15 +35,22 @@ const Home = () => {
     <div className="home-page animate-fade-in">
       {/* 1. Full Screen Hero Section */}
       <header className="hero-section full-screen">
+        {/* Offers Banner overlaying top of hero */}
         <OffersBanner />
+
         {/* Background image layers for fade transition */}
-        {images.map((img, index) => (
-          <div 
-            key={index} 
-            className={`hero-bg-layer ${index === currentImageIndex ? 'active' : ''}`}
-            style={{ backgroundImage: `url(${img})` }}
-          />
-        ))}
+        {images.length > 0 ? (
+          images.map((img, index) => (
+            <div 
+              key={index} 
+              className={`hero-bg-layer ${index === currentImageIndex ? 'active' : ''}`}
+              style={{ backgroundImage: `url(${img})` }}
+            />
+          ))
+        ) : (
+          <div className="hero-bg-layer active hero-gradient-fallback" />
+        )}
+
         <div className="hero-overlay"></div>
         <div className="hero-container-full container">
           <div className="hero-content-full animate-fade-in-up">

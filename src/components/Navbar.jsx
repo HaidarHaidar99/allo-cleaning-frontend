@@ -48,7 +48,17 @@ const Navbar = () => {
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      navigate(`/services?search=${encodeURIComponent(searchQuery.trim())}`);
+      // Navigate to home with search param, then scroll to services
+      if (location.pathname !== '/') {
+        navigate(`/?search=${encodeURIComponent(searchQuery.trim())}`);
+      } else {
+        // Already on home, update URL and scroll to services section
+        navigate(`/?search=${encodeURIComponent(searchQuery.trim())}`, { replace: true });
+        const servicesEl = document.getElementById('services-section');
+        if (servicesEl) {
+          servicesEl.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
       setShowMobileSearch(false);
     }
   };
@@ -233,13 +243,12 @@ const Navbar = () => {
                   </Link>
                 </li>
               )}
-              <li style={{ marginTop: '20px', width: '100%', borderTop: '1px solid var(--border-color)', paddingTop: '15px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-                  <span style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--text-dark)' }}>Theme</span>
-                  <button type="button" className="theme-toggle-btn" onClick={toggleDarkMode} title="Toggle Theme">
-                    {darkMode ? <Sun size={20} /> : <Moon size={20} />}
-                  </button>
-                </div>
+              {/* Dark Mode Toggle inside Drawer */}
+              <li className="drawer-theme-toggle">
+                <span className="drawer-theme-label">Theme</span>
+                <button type="button" className="theme-toggle-btn" onClick={toggleDarkMode} title="Toggle Theme">
+                  {darkMode ? <Sun size={20} /> : <Moon size={20} />}
+                </button>
               </li>
             </ul>
           </div>
