@@ -29,8 +29,7 @@ const Favorites = () => {
       ) : (
         <div className="no-favorites-box text-center" style={{ padding: '40px 0' }}>
           <p style={{ color: 'var(--text-light)', marginBottom: '15px' }}>No favorites saved yet.</p>
-          <Link to="/" className="btn btn-outline btn-small" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-            <ArrowLeft size={14} />
+          <Link to="/" className="btn btn-primary btn-small" style={{ display: 'inline-flex', alignItems: 'center' }}>
             <span>Go Back</span>
           </Link>
         </div>

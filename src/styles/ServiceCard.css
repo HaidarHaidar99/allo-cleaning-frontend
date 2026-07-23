@@ -163,17 +163,17 @@
 }
 
 .cart-toggle-btn:hover {
-  background-color: var(--accent-purple-light);
-  border-color: var(--accent-purple);
-  color: var(--accent-purple-hover);
+  background-color: var(--accent-cyan-light);
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan-hover);
   transform: translateY(-1px);
 }
 
 .cart-toggle-btn.in-cart {
-  background-color: var(--accent-purple);
-  border-color: var(--accent-purple);
+  background-color: #3b82f6;
+  border-color: #3b82f6;
   color: var(--bg-white);
-  box-shadow: 0 4px 10px rgba(124, 58, 237, 0.2);
+  box-shadow: 0 4px 10px rgba(59, 130, 246, 0.2);
 }
 
 .cart-toggle-btn.in-cart:hover {
@@ -200,17 +200,17 @@
   font-weight: 600;
   font-size: 0.85rem;
   cursor: pointer;
-  background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan));
+  background: #2563eb;
   color: var(--bg-white);
   border: none;
   transition: var(--transition-normal);
-  box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2);
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2);
 }
 
 .buy-now-btn:hover {
-  background: linear-gradient(135deg, var(--accent-green-hover), var(--accent-cyan-hover));
+  background: #1d4ed8;
   transform: translateY(-2px);
-  box-shadow: 0 6px 14px rgba(16, 185, 129, 0.35);
+  box-shadow: 0 6px 14px rgba(37, 99, 235, 0.35);
 }
 
 @media (max-width: 480px) {

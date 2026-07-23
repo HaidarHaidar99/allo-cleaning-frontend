@@ -3,7 +3,7 @@ import { useAdminAuth } from '../../context/AdminAuthContext';
 import { useSettings } from '../../context/SettingsContext';
 import { 
   Settings, Save, Globe, Smartphone, Mail, MapPin, 
-  Layout, Star, MessageSquare, AlertCircle, Check, Camera, Image as ImageIcon, Eye, EyeOff
+  Layout, Star, MessageSquare, AlertCircle, Check, Camera, Image as ImageIcon, Eye, EyeOff, Plus
 } from 'lucide-react';
 
 const Facebook = ({ size = 24, className = '', ...props }) => (
@@ -56,6 +56,10 @@ const ManageSettings = () => {
     contactTitle: '',
     contactDescription: '',
     heroImageBase64: '',
+    heroImage2: '',
+    heroImage3: '',
+    heroMode: 'single',
+    offers: [],
     activePages: {
       home: true,
       products: true,
@@ -88,6 +92,10 @@ const ManageSettings = () => {
         contactTitle: settings.contactTitle || '',
         contactDescription: settings.contactDescription || '',
         heroImageBase64: settings.heroImageBase64 || '',
+        heroImage2: settings.heroImage2 || '',
+        heroImage3: settings.heroImage3 || '',
+        heroMode: settings.heroMode || 'single',
+        offers: settings.offers || [],
         activePages: settings.activePages || {
           home: true,
           products: true,
@@ -117,6 +125,45 @@ const ManageSettings = () => {
   };
 
   // Canvas Image Compression for Hero Background
+  const handleSlotImageChange = (e, fieldName) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const img = new Image();
+        img.onload = () => {
+          const MAX_WIDTH = 1920;
+          const MAX_HEIGHT = 1080;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height) {
+            if (width > MAX_WIDTH) {
+              height *= MAX_WIDTH / width;
+              width = MAX_WIDTH;
+            }
+          } else {
+            if (height > MAX_HEIGHT) {
+              width *= MAX_HEIGHT / height;
+              height = MAX_HEIGHT;
+            }
+          }
+
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          
+          const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
+          setFormData(prev => ({ ...prev, [fieldName]: dataUrl }));
+        };
+        img.src = event.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -230,9 +277,18 @@ const ManageSettings = () => {
           <button 
             className={`settings-tab-btn ${activeTab === 'pages' ? 'active' : ''}`}
             onClick={() => setActiveTab('pages')}
+            type="button"
           >
             <Eye size={16} />
             <span>Page Visibility</span>
+          </button>
+          <button 
+            className={`settings-tab-btn ${activeTab === 'offers' ? 'active' : ''}`}
+            onClick={() => setActiveTab('offers')}
+            type="button"
+          >
+            <AlertCircle size={16} />
+            <span>Special Offers</span>
           </button>
         </div>
 
@@ -398,27 +454,86 @@ const ManageSettings = () => {
                 </div>
 
                 <div className="form-group full-width">
-                  <label>Hero Background Image</label>
-                  <div className="image-upload-wrapper" style={{ border: '1.5px dashed var(--admin-border)', padding: '15px', borderRadius: '10px', textAlign: 'center', backgroundColor: 'var(--admin-bg)', position: 'relative' }}>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageChange}
-                      style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0, cursor: 'pointer' }}
-                    />
-                    <ImageIcon size={32} style={{ color: 'var(--admin-text-muted)', marginBottom: '8px' }} />
-                    <p style={{ fontSize: '0.8rem', fontWeight: 'bold' }}>{formData.heroImageBase64 ? 'Background Image Set (Base64)' : 'Click or Drag Image Here'}</p>
-                    <p className="text-muted" style={{ fontSize: '0.7rem', marginTop: '2px' }}>High-res JPG/WEBP recommended</p>
-                  </div>
-                  {formData.heroImageBase64 && (
-                    <div style={{ marginTop: '12px', textAlign: 'center' }}>
-                      <img 
-                        src={formData.heroImageBase64} 
-                        alt="Hero Preview" 
-                        style={{ maxWidth: '100%', maxHeight: '200px', borderRadius: '8px', border: '1px solid var(--admin-border)', objectFit: 'cover' }} 
-                      />
+                  <label htmlFor="heroMode">Hero Image Mode</label>
+                  <select 
+                    id="heroMode"
+                    name="heroMode"
+                    value={formData.heroMode || 'single'}
+                    onChange={handleChange}
+                    className="form-control"
+                    style={{ marginBottom: '20px' }}
+                  >
+                    <option value="single">Single Background Image (Slot 1 Only)</option>
+                    <option value="carousel">Carousel Slide (Slot 1, 2, and 3 - Rotates every 3s)</option>
+                  </select>
+                </div>
+
+                <div className="form-group full-width">
+                  <label>Hero Background Image Slots (Base64 compressed)</label>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '15px', marginTop: '10px' }}>
+                    {/* Slot 1 */}
+                    <div style={{ backgroundColor: 'var(--admin-bg)', border: '1px solid var(--admin-border)', borderRadius: '8px', padding: '12px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                      <span style={{ fontSize: '0.75rem', fontWeight: '700', marginBottom: '8px', textTransform: 'uppercase', color: 'var(--admin-text-main)' }}>Image Slot 1</span>
+                      <div className="image-upload-wrapper" style={{ border: '1.5px dashed var(--admin-border)', padding: '10px', borderRadius: '8px', width: '100%', height: '80px', textAlign: 'center', backgroundColor: '#ffffff', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => handleSlotImageChange(e, 'heroImageBase64')}
+                          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0, cursor: 'pointer' }}
+                        />
+                        <ImageIcon size={20} style={{ color: 'var(--admin-text-muted)', marginBottom: '4px' }} />
+                        <span style={{ fontSize: '0.65rem', fontWeight: 'bold' }}>{formData.heroImageBase64 ? 'Change' : 'Upload'}</span>
+                      </div>
+                      {formData.heroImageBase64 && (
+                        <div style={{ marginTop: '8px', width: '100%', position: 'relative', textAlign: 'center' }}>
+                          <img src={formData.heroImageBase64} alt="Preview 1" style={{ width: '100%', height: '60px', borderRadius: '4px', objectFit: 'cover' }} />
+                          <button type="button" onClick={() => setFormData(prev => ({ ...prev, heroImageBase64: '' }))} style={{ position: 'absolute', top: '2px', right: '2px', backgroundColor: '#ef4444', color: '#ffffff', border: 'none', borderRadius: '50%', width: '16px', height: '16px', fontSize: '9px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>×</button>
+                        </div>
+                      )}
                     </div>
-                  )}
+
+                    {/* Slot 2 */}
+                    <div style={{ backgroundColor: 'var(--admin-bg)', border: '1px solid var(--admin-border)', borderRadius: '8px', padding: '12px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                      <span style={{ fontSize: '0.75rem', fontWeight: '700', marginBottom: '8px', textTransform: 'uppercase', color: 'var(--admin-text-main)' }}>Image Slot 2</span>
+                      <div className="image-upload-wrapper" style={{ border: '1.5px dashed var(--admin-border)', padding: '10px', borderRadius: '8px', width: '100%', height: '80px', textAlign: 'center', backgroundColor: '#ffffff', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => handleSlotImageChange(e, 'heroImage2')}
+                          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0, cursor: 'pointer' }}
+                        />
+                        <ImageIcon size={20} style={{ color: 'var(--admin-text-muted)', marginBottom: '4px' }} />
+                        <span style={{ fontSize: '0.65rem', fontWeight: 'bold' }}>{formData.heroImage2 ? 'Change' : 'Upload'}</span>
+                      </div>
+                      {formData.heroImage2 && (
+                        <div style={{ marginTop: '8px', width: '100%', position: 'relative', textAlign: 'center' }}>
+                          <img src={formData.heroImage2} alt="Preview 2" style={{ width: '100%', height: '60px', borderRadius: '4px', objectFit: 'cover' }} />
+                          <button type="button" onClick={() => setFormData(prev => ({ ...prev, heroImage2: '' }))} style={{ position: 'absolute', top: '2px', right: '2px', backgroundColor: '#ef4444', color: '#ffffff', border: 'none', borderRadius: '50%', width: '16px', height: '16px', fontSize: '9px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>×</button>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Slot 3 */}
+                    <div style={{ backgroundColor: 'var(--admin-bg)', border: '1px solid var(--admin-border)', borderRadius: '8px', padding: '12px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                      <span style={{ fontSize: '0.75rem', fontWeight: '700', marginBottom: '8px', textTransform: 'uppercase', color: 'var(--admin-text-main)' }}>Image Slot 3</span>
+                      <div className="image-upload-wrapper" style={{ border: '1.5px dashed var(--admin-border)', padding: '10px', borderRadius: '8px', width: '100%', height: '80px', textAlign: 'center', backgroundColor: '#ffffff', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => handleSlotImageChange(e, 'heroImage3')}
+                          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0, cursor: 'pointer' }}
+                        />
+                        <ImageIcon size={20} style={{ color: 'var(--admin-text-muted)', marginBottom: '4px' }} />
+                        <span style={{ fontSize: '0.65rem', fontWeight: 'bold' }}>{formData.heroImage3 ? 'Change' : 'Upload'}</span>
+                      </div>
+                      {formData.heroImage3 && (
+                        <div style={{ marginTop: '8px', width: '100%', position: 'relative', textAlign: 'center' }}>
+                          <img src={formData.heroImage3} alt="Preview 3" style={{ width: '100%', height: '60px', borderRadius: '4px', objectFit: 'cover' }} />
+                          <button type="button" onClick={() => setFormData(prev => ({ ...prev, heroImage3: '' }))} style={{ position: 'absolute', top: '2px', right: '2px', backgroundColor: '#ef4444', color: '#ffffff', border: 'none', borderRadius: '50%', width: '16px', height: '16px', fontSize: '9px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>×</button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 </div>
 
                 {/* Stats row */}
@@ -593,6 +708,95 @@ const ManageSettings = () => {
                   </div>
                 ))}
               </div>
+            </div>
+          )}
+
+          {/* Tab 5: Special Offers Banner */}
+          {activeTab === 'offers' && (
+            <div className="settings-form-section animate-fade-in">
+              <h3 className="settings-section-title">Special Offers Top Banner</h3>
+              <p className="settings-section-desc">Manage promotional announcements shown at the very top of the site. If multiple offers are active, they will rotate automatically every 5 seconds.</p>
+              
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', marginBottom: '20px' }}>
+                {formData.offers && formData.offers.length > 0 ? (
+                  formData.offers.map((offer, idx) => (
+                    <div key={offer.id || idx} style={{ display: 'flex', gap: '12px', alignItems: 'center', backgroundColor: 'var(--admin-bg)', padding: '15px', borderRadius: '8px', border: '1px solid var(--admin-border)' }}>
+                      <input 
+                        type="text"
+                        value={offer.text}
+                        onChange={(e) => {
+                          const updated = [...formData.offers];
+                          updated[idx].text = e.target.value;
+                          setFormData(prev => ({ ...prev, offers: updated }));
+                        }}
+                        className="form-control"
+                        placeholder="Offer Description (e.g. Get 25% off deep cleaning packages this summer!)"
+                        style={{ flexGrow: 1 }}
+                        required
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const updated = [...formData.offers];
+                          updated[idx].active = !updated[idx].active;
+                          setFormData(prev => ({ ...prev, offers: updated }));
+                        }}
+                        style={{
+                          padding: '8px 16px',
+                          borderRadius: '20px',
+                          border: 'none',
+                          cursor: 'pointer',
+                          fontWeight: 'bold',
+                          fontSize: '0.8rem',
+                          backgroundColor: offer.active ? '#10b981' : 'var(--border-color)',
+                          color: offer.active ? '#000000' : 'var(--text-muted)',
+                          minWidth: '90px',
+                          textAlign: 'center'
+                        }}
+                      >
+                        {offer.active ? 'Active' : 'Inactive'}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const updated = formData.offers.filter((_, i) => i !== idx);
+                          setFormData(prev => ({ ...prev, offers: updated }));
+                        }}
+                        style={{
+                          padding: '8px 16px',
+                          borderRadius: '6px',
+                          border: 'none',
+                          cursor: 'pointer',
+                          backgroundColor: '#fee2e2',
+                          color: '#b91c1c',
+                          fontWeight: 'bold',
+                          fontSize: '0.8rem'
+                        }}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-muted" style={{ fontStyle: 'italic', fontSize: '0.85rem' }}>No offers added yet.</p>
+                )}
+              </div>
+
+              <button
+                type="button"
+                className="btn btn-outline btn-small"
+                onClick={() => {
+                  const newOffer = { id: Date.now().toString(), text: '', active: true };
+                  setFormData(prev => ({
+                    ...prev,
+                    offers: [...(prev.offers || []), newOffer]
+                  }));
+                }}
+                style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+              >
+                <Plus size={14} />
+                <span>Add New Special Offer</span>
+              </button>
             </div>
           )}
 

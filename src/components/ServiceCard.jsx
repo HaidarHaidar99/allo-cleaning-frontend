@@ -95,7 +95,6 @@ Thank you.`;
           <div className="service-actions">
             {/* Contact Us Button */}
             <button className="buy-now-btn" onClick={handleBuyNow} style={{ width: '100%', justifyContent: 'center' }}>
-              <MessageCircle size={16} />
               <span>Contact Us</span>
             </button>
           </div>

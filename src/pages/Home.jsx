@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Sparkles, Shield, Compass, CheckCircle, ArrowRight, Award, Smile } from 'lucide-react';
+import { Sparkles, Shield, Compass, CheckCircle, Award, Smile } from 'lucide-react';
 import Services from './Services';
 import Products from './Products';
 import Contact from './Contact';
@@ -9,18 +9,43 @@ import '../styles/Home.css';
 
 const Home = () => {
   const { settings } = useSettings();
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  // Compile active hero images from settings
+  const images = [];
+  if (settings.heroImageBase64) images.push(settings.heroImageBase64);
+  if (settings.heroImage2) images.push(settings.heroImage2);
+  if (settings.heroImage3) images.push(settings.heroImage3);
+
+  // Fallback default image if none uploaded
+  if (images.length === 0) {
+    images.push('https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=1920&auto=format&fit=crop');
+  }
+
+  const isCarousel = settings.heroMode === 'carousel' && images.length > 1;
+
+  useEffect(() => {
+    if (!isCarousel) return;
+
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % images.length);
+    }, 3000); // changes every 3 seconds
+
+    return () => clearInterval(interval);
+  }, [isCarousel, images.length]);
 
   return (
     <div className="home-page animate-fade-in">
       {/* 1. Full Screen Hero Section */}
-      <header 
-        className="hero-section full-screen"
-        style={{ 
-          backgroundImage: settings.heroImageBase64 
-            ? `url(${settings.heroImageBase64})` 
-            : 'url(https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=1920&auto=format&fit=crop)'
-        }}
-      >
+      <header className="hero-section full-screen">
+        {/* Background image layers for fade transition */}
+        {images.map((img, index) => (
+          <div 
+            key={index} 
+            className={`hero-bg-layer ${index === currentImageIndex ? 'active' : ''}`}
+            style={{ backgroundImage: `url(${img})` }}
+          />
+        ))}
         <div className="hero-overlay"></div>
         <div className="hero-container-full container">
           <div className="hero-content-full animate-fade-in-up">
@@ -33,7 +58,6 @@ const Home = () => {
             <div className="hero-actions-full">
               <a href="#services-section" className="btn btn-primary btn-lg">
                 <span>Explore Now</span>
-                <ArrowRight size={18} />
               </a>
               <a href="#contact-section" className="btn btn-outline-light btn-lg">
                 <span>Contact Us</span>

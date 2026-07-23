@@ -152,7 +152,6 @@ const Contact = () => {
             </div>
 
             <button type="submit" className="btn btn-primary submit-btn" disabled={loading}>
-              <Send size={16} />
               <span>{loading ? 'Submitting...' : 'Send Message'}</span>
             </button>
           </form>

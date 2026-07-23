@@ -121,7 +121,7 @@ const Products = () => {
           <div className="spinner"></div>
         </div>
       ) : filteredItems.length > 0 ? (
-        <div className="services-grid">
+        <div className="products-grid">
           {filteredItems.map((item) => (
             <ProductCard key={item.id} product={item} />
           ))}

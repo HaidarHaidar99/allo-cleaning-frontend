@@ -1,0 +1,108 @@
+/* Offers Banner Top Bar Styling */
+
+.offers-banner {
+  width: 100%;
+  background: linear-gradient(90deg, #05070c 0%, #1e293b 50%, #05070c 100%);
+  border-bottom: 1.5px solid rgba(226, 232, 240, 0.1);
+  padding: 8px 20px;
+  text-align: center;
+  z-index: 1001;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.offers-banner-container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 24px;
+}
+
+.offer-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Animations for Carousel */
+.offer-content.fade-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.offer-content.fade-out {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+
+/* Gold Badge for Offer */
+.offer-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #d97706, #f59e0b);
+  color: #ffffff;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.3);
+}
+
+.gold-sparkle {
+  color: #fff;
+  animation: rotate-sparkle 4s linear infinite;
+}
+
+@keyframes rotate-sparkle {
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(1.15); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+.offer-text {
+  color: #f1f5f9;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Single Luxurious design for single offer banner */
+.offers-banner.single-offer {
+  background: linear-gradient(90deg, #090e17 0%, #1e1b4b 50%, #090e17 100%);
+  border-bottom: 2px solid rgba(14, 165, 233, 0.3);
+}
+
+.offers-banner.single-offer .offer-text {
+  color: #ffffff;
+  font-size: 0.9rem;
+  text-shadow: 0 0 4px rgba(255, 255, 255, 0.2);
+}
+
+.offers-banner.single-offer .offer-tag {
+  background: linear-gradient(135deg, #0ea5e9, #8b5cf6);
+  box-shadow: 0 0 10px rgba(14, 165, 233, 0.4);
+}
+
+@media (max-width: 600px) {
+  .offers-banner {
+    padding: 6px 12px;
+  }
+  
+  .offer-text {
+    font-size: 0.78rem;
+  }
+  
+  .offers-banner.single-offer .offer-text {
+    font-size: 0.8rem;
+  }
+}

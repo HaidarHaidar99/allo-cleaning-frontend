@@ -102,7 +102,6 @@ Thank you.`;
                 title="Remove from Cart"
                 style={{ flex: 1 }}
               >
-                <ShoppingCart size={18} />
                 <span>In Cart</span>
               </button>
             ) : (
@@ -112,14 +111,12 @@ Thank you.`;
                 title="Add to Cart"
                 style={{ flex: 1 }}
               >
-                <ShoppingCart size={18} />
                 <span>Add to Cart</span>
               </button>
             )}
 
             {/* Contact Us Button */}
             <button className="buy-now-btn" onClick={handleBuyNow} style={{ flex: 1, justifyContent: 'center' }}>
-              <MessageCircle size={16} />
               <span>Buy Now</span>
             </button>
           </div>

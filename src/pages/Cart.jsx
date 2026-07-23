@@ -104,7 +104,6 @@ Thank you.`;
 
             <div className="cart-actions-footer">
               <Link to="/services" className="back-link">
-                <ArrowLeft size={16} />
                 <span>Continue Browsing</span>
               </Link>
               <button className="clear-cart-btn" onClick={clearCart}>
@@ -129,7 +128,6 @@ Thank you.`;
             </div>
             
             <button className="checkout-btn" onClick={handleCheckout}>
-              <Send size={18} />
               <span>Book via WhatsApp Now</span>
             </button>
             
@@ -141,8 +139,7 @@ Thank you.`;
       ) : (
         <div className="no-cart-box text-center" style={{ padding: '40px 0' }}>
           <p style={{ color: 'var(--text-light)', marginBottom: '15px' }}>Your cart is currently empty.</p>
-          <Link to="/" className="btn btn-outline btn-small" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-            <ArrowLeft size={14} />
+          <Link to="/" className="btn btn-primary btn-small" style={{ display: 'inline-flex', alignItems: 'center' }}>
             <span>Go Back</span>
           </Link>
         </div>
