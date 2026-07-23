@@ -163,6 +163,30 @@ body.dark-theme {
   color: #cbd5e1;
 }
 
+body.dark-theme .navbar {
+  background: rgba(30, 41, 59, 0.9) !important;
+  border-bottom-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+body.dark-theme .footer {
+  background-color: #0b1120 !important;
+  border-top-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+body.dark-theme .mobile-bottom-bar {
+  background: rgba(30, 41, 59, 0.95) !important;
+  border-top-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+body.dark-theme .glass-card-white {
+  background: #1e293b !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+body.dark-theme .mobile-search-input-white {
+  color: #f8fafc !important;
+}
+
 /* Button Component */
 .btn {
   display: inline-flex;

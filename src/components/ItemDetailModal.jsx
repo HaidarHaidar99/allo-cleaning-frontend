@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Heart, ShoppingCart } from 'lucide-react';
+import { X, Heart } from 'lucide-react';
 import { useFavorites } from '../context/FavoritesContext';
 import { useCart } from '../context/CartContext';
 import { useSettings } from '../context/SettingsContext';
@@ -52,15 +52,15 @@ Thank you.`;
   const inCart = isInCart(id);
 
   return (
-    <div className="modal-overlay animate-fade-in" onClick={onClose} style={{ zIndex: 1100 }}>
-      <div className="modal-content glass-card" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '550px', width: '90%', padding: '24px', position: 'relative' }}>
+    <div className="modal-overlay animate-fade-in" onClick={onClose} style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(0, 0, 0, 0.65)', backdropFilter: 'blur(5px)', WebkitBackdropFilter: 'blur(5px)', zIndex: 1100 }}>
+      <div className="modal-content glass-card" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '500px', width: '90%', maxHeight: '90vh', overflowY: 'auto', padding: '24px', position: 'relative', margin: 'auto' }}>
         {/* Close button */}
         <button className="modal-close-btn" onClick={onClose} style={{ position: 'absolute', top: '15px', right: '15px', background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--text-light)' }}>
           <X size={22} />
         </button>
 
         {/* Modal Image */}
-        <div style={{ position: 'relative', width: '100%', height: '220px', borderRadius: 'var(--radius-md)', overflow: 'hidden', marginBottom: '16px' }}>
+        <div style={{ position: 'relative', width: '100%', height: '200px', borderRadius: 'var(--radius-md)', overflow: 'hidden', marginBottom: '16px' }}>
           <img src={getItemImage()} alt={name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           <span className="service-badge">{category}</span>
           <button 
@@ -73,8 +73,8 @@ Thank you.`;
         </div>
 
         {/* Title & Description */}
-        <h2 style={{ fontSize: '1.4rem', color: 'var(--primary-dark)', marginBottom: '10px' }}>{name}</h2>
-        <p style={{ color: 'var(--text-medium)', fontSize: '0.95rem', lineHeight: '1.6', marginBottom: '24px' }}>
+        <h2 style={{ fontSize: '1.3rem', color: 'var(--primary-dark)', marginBottom: '10px' }}>{name}</h2>
+        <p style={{ color: 'var(--text-medium)', fontSize: '0.9rem', lineHeight: '1.6', marginBottom: '24px' }}>
           {description}
         </p>
 

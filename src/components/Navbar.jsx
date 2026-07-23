@@ -175,7 +175,7 @@ const Navbar = () => {
             <div className="drawer-header-luxury">
               <div className="text-logo-luxury">
                 <span className="logo-accent">Allo</span>
-                <span className="logo-main" style={{ color: 'var(--text-dark)' }}>Cleaning</span>
+                <span className="logo-main">Cleaning</span>
               </div>
               <button className="drawer-close-btn" onClick={closeMobileMenu}>
                 <X size={24} />
@@ -233,14 +233,19 @@ const Navbar = () => {
                   </Link>
                 </li>
               )}
+              <li style={{ marginTop: '20px', width: '100%', borderTop: '1px solid var(--border-color)', paddingTop: '15px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+                  <span style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--text-dark)' }}>Theme</span>
+                  <button type="button" className="theme-toggle-btn" onClick={toggleDarkMode} title="Toggle Theme">
+                    {darkMode ? <Sun size={20} /> : <Moon size={20} />}
+                  </button>
+                </div>
+              </li>
             </ul>
           </div>
 
           {/* Mobile Quick Action Icons */}
           <div className="mobile-action-icons">
-            <button type="button" className="theme-toggle-btn" onClick={toggleDarkMode} title="Toggle Theme">
-              {darkMode ? <Sun size={20} /> : <Moon size={20} />}
-            </button>
             <button className="mobile-action-btn search-toggle" onClick={() => setShowMobileSearch(!showMobileSearch)}>
               <Search size={22} />
             </button>

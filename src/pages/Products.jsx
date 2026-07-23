@@ -75,13 +75,8 @@ const Products = () => {
   return (
     <div className="services-page container animate-fade-in">
       {/* Header */}
-      <div className="services-header text-center">
-        <div className="services-tag">
-          <Sparkles size={16} className="text-cyan animate-pulse" />
-          <span>Our Cleaning Products</span>
-        </div>
-        <h1>Browse Our Premium Cleaning Products</h1>
-        <p>High-quality, eco-friendly cleaning supplies and equipment recommended by our professionals. Purchase directly or add to your cart.</p>
+      <div className="services-header text-center" style={{ marginBottom: '24px' }}>
+        <h1>Products</h1>
       </div>
 
       {/* Filter and Sort Control Bar */}

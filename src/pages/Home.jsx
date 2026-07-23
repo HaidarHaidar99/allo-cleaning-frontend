@@ -4,6 +4,7 @@ import { Sparkles, Shield, Compass, CheckCircle, Award, Smile } from 'lucide-rea
 import Services from './Services';
 import Products from './Products';
 import Contact from './Contact';
+import OffersBanner from '../components/OffersBanner';
 import { useSettings } from '../context/SettingsContext';
 import '../styles/Home.css';
 
@@ -11,23 +12,14 @@ const Home = () => {
   const { settings } = useSettings();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  // Compile active hero images from settings or defaults
+  // Compile active hero images ONLY from admin settings (no hardcoded unsplash fallbacks)
   const images = [];
   if (settings.heroImageBase64) images.push(settings.heroImageBase64);
   if (settings.heroImage2) images.push(settings.heroImage2);
   if (settings.heroImage3) images.push(settings.heroImage3);
 
-  // Default 3 high-res fallback images if no images uploaded by admin
-  if (images.length === 0) {
-    images.push(
-      'https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=1920&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?q=80&w=1920&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?q=80&w=1920&auto=format&fit=crop'
-    );
-  }
-
-  // Active carousel if heroMode is carousel OR multiple images exist
-  const isCarousel = settings.heroMode === 'carousel' || images.length > 1;
+  // Active carousel if heroMode is carousel AND multiple images exist
+  const isCarousel = settings.heroMode === 'carousel' && images.length > 1;
 
   useEffect(() => {
     if (!isCarousel || images.length <= 1) return;
@@ -43,6 +35,7 @@ const Home = () => {
     <div className="home-page animate-fade-in">
       {/* 1. Full Screen Hero Section */}
       <header className="hero-section full-screen">
+        <OffersBanner />
         {/* Background image layers for fade transition */}
         {images.map((img, index) => (
           <div 

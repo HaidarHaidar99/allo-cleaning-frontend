@@ -1,16 +1,25 @@
-/* Offers Banner Top Bar Styling */
+/* Offers Banner Overlaying Top of Hero Image */
 
 .offers-banner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
   width: 100%;
   background: #ffffff;
-  border-bottom: 1px solid var(--border-color);
-  padding: 8px 20px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 10px 20px;
   text-align: center;
-  z-index: 999;
-  position: relative;
+  z-index: 10;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
   transition: var(--transition-fast);
+}
+
+body.dark-theme .offers-banner {
+  background: #1e293b;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
 .offers-banner-container {
@@ -19,15 +28,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 24px;
+  min-height: 22px;
 }
 
 .offer-content {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  flex-wrap: wrap;
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
@@ -42,50 +49,24 @@
   transform: translateY(-8px);
 }
 
-/* Tag for Offer */
-.offer-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: var(--accent-cyan-light);
-  color: var(--accent-cyan-hover);
-  padding: 3px 10px;
-  border-radius: var(--radius-full);
-  font-size: 0.7rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-}
-
-.gold-sparkle {
-  color: var(--accent-cyan);
-}
-
 .offer-text {
-  color: var(--text-dark);
-  font-size: 0.85rem;
+  color: #0f172a;
+  font-size: 0.9rem;
   font-weight: 600;
   letter-spacing: 0.2px;
   font-family: 'Inter', sans-serif;
 }
 
-/* Single offer banner style */
-.offers-banner.single-offer {
-  background: #ffffff;
-  border-bottom: 1.5px solid var(--accent-cyan-light);
-}
-
-.offers-banner.single-offer .offer-text {
-  color: var(--primary-dark);
-  font-size: 0.88rem;
+body.dark-theme .offer-text {
+  color: #f8fafc;
 }
 
 @media (max-width: 600px) {
   .offers-banner {
-    padding: 6px 12px;
+    padding: 8px 12px;
   }
   
   .offer-text {
-    font-size: 0.78rem;
+    font-size: 0.8rem;
   }
 }

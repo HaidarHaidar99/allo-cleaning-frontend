@@ -59,7 +59,7 @@ Thank you.`;
         <span className="service-badge">{category}</span>
 
         {/* Product Image */}
-        <div className="service-image-wrapper">
+        <div className="service-image-wrapper" onClick={() => setShowModal(true)} style={{ cursor: 'pointer' }}>
           <img 
             src={getProductImage()}  
             alt={name} 
@@ -69,18 +69,14 @@ Thank you.`;
             }} 
           />
           
-          {/* Top Quick Actions */}
+          {/* Top Favorite Action */}
           <div className="card-top-actions">
             <button 
-              className="quick-eye-btn" 
-              onClick={() => setShowModal(true)}
-              title="View Details"
-            >
-              <Eye size={18} />
-            </button>
-            <button 
               className={`favorite-btn ${favorited ? 'favorited' : ''}`} 
-              onClick={() => toggleFavorite(product)}
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleFavorite(product);
+              }}
               title={favorited ? 'Remove from Favorites' : 'Add to Favorites'}
             >
               <Heart size={18} fill={favorited ? '#ef4444' : 'none'} />
@@ -90,7 +86,7 @@ Thank you.`;
 
         {/* Service Details */}
         <div className="service-details">
-          <h3 className="service-title">{name}</h3>
+          <h3 className="service-title" onClick={() => setShowModal(true)} style={{ cursor: 'pointer' }}>{name}</h3>
           <p className="service-description">{description}</p>
           
           <div className="service-footer">

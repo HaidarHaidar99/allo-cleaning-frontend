@@ -75,13 +75,8 @@ const Services = () => {
   return (
     <div className="services-page container animate-fade-in">
       {/* Header */}
-      <div className="services-header text-center">
-        <div className="services-tag">
-          <Sparkles size={16} className="text-cyan animate-pulse" />
-          <span>Our Cleaning Services</span>
-        </div>
-        <h1>Explore Our Professional Services</h1>
-        <p>Compare prices, browse categories, and select the perfect cleaning solutions. Book instantly or add to your favorites.</p>
+      <div className="services-header text-center" style={{ marginBottom: '24px' }}>
+        <h1>Services</h1>
       </div>
 
       {/* Filter and Sort Control Bar */}
