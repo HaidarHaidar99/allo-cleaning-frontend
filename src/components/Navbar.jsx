@@ -1,22 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useFavorites } from '../context/FavoritesContext';
-import { useAdminAuth } from '../context/AdminAuthContext';
 import { useSettings } from '../context/SettingsContext';
-import { Sparkles, Heart, ShoppingCart, User, LogOut, Menu, X, Search } from 'lucide-react';
+import { ShoppingCart, Menu, X, Search, Sun, Moon } from 'lucide-react';
 import '../styles/Navbar.css';
 
 const Navbar = () => {
   const { cart } = useCart();
   const { favorites } = useFavorites();
-  const { admin, logout } = useAdminAuth();
   const { settings } = useSettings();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [showMobileSearch, setShowMobileSearch] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+
+  // Dark mode state management
+  const [darkMode, setDarkMode] = useState(() => {
+    return localStorage.getItem('theme') === 'dark';
+  });
+
+  useEffect(() => {
+    if (darkMode) {
+      document.body.classList.add('dark-theme');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.body.classList.remove('dark-theme');
+      localStorage.setItem('theme', 'light');
+    }
+  }, [darkMode]);
+
+  const toggleDarkMode = () => {
+    setDarkMode(prev => !prev);
+  };
   
   const activePages = settings?.activePages || { home: true, products: true, services: true, contact: true };
 
@@ -26,12 +43,6 @@ const Navbar = () => {
 
   const closeMobileMenu = () => {
     setMobileMenuOpen(false);
-  };
-
-  const handleLogout = () => {
-    logout();
-    closeMobileMenu();
-    navigate('/');
   };
 
   const handleSearchSubmit = (e) => {
@@ -70,7 +81,6 @@ const Navbar = () => {
             <div className="text-logo-luxury">
               <span className="logo-accent">Allo</span>
               <span className="logo-main">Cleaning</span>
-              <Sparkles className="logo-sparkle" size={14} />
             </div>
           </Link>
         </div>
@@ -80,7 +90,7 @@ const Navbar = () => {
           <form onSubmit={handleSearchSubmit} className="search-bar-desktop">
             <input 
               type="text" 
-              placeholder="Search services..." 
+              placeholder="Search services or products..." 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="search-input"
@@ -94,27 +104,85 @@ const Navbar = () => {
             <div className="text-logo-luxury">
               <span className="logo-accent">Allo</span>
               <span className="logo-main">Cleaning</span>
-              <Sparkles className="logo-sparkle" size={14} />
             </div>
           </Link>
         </div>
 
         {/* Right: Menu links (Desktop) or Action Icons (Mobile) */}
         <div className="nav-right">
+          {/* Desktop Nav Links */}
+          <ul className="navbar-links desktop-only-links">
+            {activePages.home && (
+              <li>
+                <Link to="/" className={isActive('/')}>Home</Link>
+              </li>
+            )}
+            {activePages.services && (
+              <li>
+                <Link 
+                  to="/#services-section" 
+                  className={location.hash === '#services-section' ? 'active' : ''}
+                  onClick={(e) => handleNavClick('services-section', e)}
+                >
+                  Services
+                </Link>
+              </li>
+            )}
+            {activePages.products && (
+              <li>
+                <Link 
+                  to="/#products-section" 
+                  className={location.hash === '#products-section' ? 'active' : ''}
+                  onClick={(e) => handleNavClick('products-section', e)}
+                >
+                  Products
+                </Link>
+              </li>
+            )}
+            <li>
+              <Link to="/favorites" className={`nav-text-link ${isActive('/favorites')}`}>
+                <span>Favorites</span>
+                {favorites.length > 0 && <span className="text-badge bg-green">{favorites.length}</span>}
+              </Link>
+            </li>
+            <li>
+              <Link to="/cart" className={`nav-text-link ${isActive('/cart')}`}>
+                <span>Cart</span>
+                {cart.length > 0 && <span className="text-badge bg-cyan">{cart.length}</span>}
+              </Link>
+            </li>
+            {activePages.contact && (
+              <li>
+                <Link 
+                  to="/#contact-section" 
+                  className={location.hash === '#contact-section' ? 'active' : ''}
+                  onClick={(e) => handleNavClick('contact-section', e)}
+                >
+                  Contact Us
+                </Link>
+              </li>
+            )}
+            <li>
+              <button type="button" className="theme-toggle-btn" onClick={toggleDarkMode} title="Toggle Theme">
+                {darkMode ? <Sun size={18} /> : <Moon size={18} />}
+              </button>
+            </li>
+          </ul>
+
+          {/* Mobile Drawer Overlay */}
           {mobileMenuOpen && <div className="mobile-drawer-overlay" onClick={closeMobileMenu}></div>}
           <div className={`mobile-drawer-wrapper ${mobileMenuOpen ? 'mobile-open' : ''}`}>
             <div className="drawer-header-luxury">
               <div className="text-logo-luxury">
                 <span className="logo-accent">Allo</span>
-                <span className="logo-main" style={{ color: '#ffffff' }}>Cleaning</span>
-                <Sparkles className="logo-sparkle" size={14} />
+                <span className="logo-main" style={{ color: 'var(--text-dark)' }}>Cleaning</span>
               </div>
               <button className="drawer-close-btn" onClick={closeMobileMenu}>
                 <X size={24} />
               </button>
             </div>
             
-            <ul className="navbar-links">
+            <ul className="navbar-links mobile-drawer-links">
               {activePages.home && (
                 <li>
                   <Link to="/" className={isActive('/')} onClick={closeMobileMenu}>Home</Link>
@@ -165,36 +233,14 @@ const Navbar = () => {
                   </Link>
                 </li>
               )}
-              
-              {admin && (
-                <li style={{ marginTop: 'auto', width: '100%' }}>
-                  <button className="logout-btn" onClick={handleLogout} style={{ width: '100%', justifyContent: 'flex-start', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '15px' }}>
-                    <LogOut size={16} />
-                    <span>Admin Logout</span>
-                  </button>
-                </li>
-              )}
             </ul>
-
-            <div className="drawer-footer-luxury">
-              <p className="drawer-footer-title">Need Premium Cleaning?</p>
-              {settings.phone && <a href={`tel:${settings.phone}`} className="drawer-footer-link">{settings.phone}</a>}
-              {settings.email && <a href={`mailto:${settings.email}`} className="drawer-footer-link">{settings.email}</a>}
-            </div>
           </div>
-
-          {/* Desktop Admin controls */}
-          {admin && (
-            <div className="desktop-admin-controls" style={{ display: 'flex', gap: '10px', marginRight: '15px' }}>
-              <Link to="/admin/dashboard" className="admin-link-btn">
-                <User size={14} />
-                <span>Dashboard</span>
-              </Link>
-            </div>
-          )}
 
           {/* Mobile Quick Action Icons */}
           <div className="mobile-action-icons">
+            <button type="button" className="theme-toggle-btn" onClick={toggleDarkMode} title="Toggle Theme">
+              {darkMode ? <Sun size={20} /> : <Moon size={20} />}
+            </button>
             <button className="mobile-action-btn search-toggle" onClick={() => setShowMobileSearch(!showMobileSearch)}>
               <Search size={22} />
             </button>
@@ -206,43 +252,24 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Redesigned Floating mobile search overlay */}
+      {/* Clean White Floating Mobile Search Overlay */}
       {showMobileSearch && (
-        <div className="mobile-search-luxury-overlay animate-fade-in">
-          <div className="mobile-search-luxury-box glass-card-dark">
-            <form onSubmit={handleSearchSubmit} className="mobile-search-luxury-form">
-              <Search size={18} className="search-icon-luxury" />
+        <div className="mobile-search-luxury-overlay animate-fade-in" onClick={(e) => { if(e.target.className.includes('mobile-search-luxury-overlay')) setShowMobileSearch(false); }}>
+          <div className="mobile-search-luxury-box glass-card-white">
+            <form onSubmit={handleSearchSubmit} className="mobile-search-luxury-form-white">
+              <Search size={20} className="search-icon-inside" />
               <input 
                 type="text" 
-                placeholder="What service do you need?" 
+                placeholder="Search services or products..." 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="mobile-search-luxury-input"
+                className="mobile-search-input-white"
                 autoFocus
               />
-              <button type="button" className="mobile-search-luxury-close" onClick={() => setShowMobileSearch(false)}>
-                <X size={18} />
+              <button type="button" className="mobile-search-close-white" onClick={() => setShowMobileSearch(false)}>
+                <X size={20} />
               </button>
             </form>
-            <div className="mobile-search-suggestions">
-              <span className="suggestions-label">Popular Searches:</span>
-              <div className="suggestions-list">
-                {['Deep Clean', 'Office', 'Carpet', 'Window'].map((tag) => (
-                  <button
-                    key={tag}
-                    type="button"
-                    className="suggestion-tag"
-                    onClick={() => {
-                      setSearchQuery(tag);
-                      navigate(`/services?search=${encodeURIComponent(tag)}`);
-                      setShowMobileSearch(false);
-                    }}
-                  >
-                    {tag}
-                  </button>
-                ))}
-              </div>
-            </div>
           </div>
         </div>
       )}

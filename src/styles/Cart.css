@@ -262,8 +262,8 @@
   gap: 10px;
   padding: 14px;
   border-radius: var(--radius-md);
-  background-color: #2563eb;
-  color: var(--bg-white);
+  background-color: var(--accent-cyan);
+  color: #ffffff;
   font-weight: 700;
   cursor: pointer;
   transition: var(--transition-fast);
@@ -271,9 +271,9 @@
 }
 
 .checkout-btn:hover {
-  background-color: #1d4ed8;
+  background-color: var(--accent-cyan-hover);
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
+  box-shadow: 0 6px 16px rgba(14, 165, 233, 0.3);
 }
 
 .checkout-info {

@@ -14,6 +14,7 @@ const Products = () => {
   const [loading, setLoading] = useState(true);
   const [searchParams] = useSearchParams();
   
+  const [visibleCount, setVisibleCount] = useState(6);
   const searchQuery = searchParams.get('search') || '';
 
   useEffect(() => {
@@ -68,6 +69,7 @@ const Products = () => {
     }
 
     setFilteredItems(filtered);
+    setVisibleCount(6);
   }, [products, selectedCategory, searchQuery, sortBy]);
 
   return (
@@ -121,11 +123,24 @@ const Products = () => {
           <div className="spinner"></div>
         </div>
       ) : filteredItems.length > 0 ? (
-        <div className="products-grid">
-          {filteredItems.map((item) => (
-            <ProductCard key={item.id} product={item} />
-          ))}
-        </div>
+        <>
+          <div className="products-grid">
+            {filteredItems.slice(0, visibleCount).map((item) => (
+              <ProductCard key={item.id} product={item} />
+            ))}
+          </div>
+          {filteredItems.length > visibleCount && (
+            <div className="text-center" style={{ marginTop: '30px', marginBottom: '50px' }}>
+              <button 
+                type="button" 
+                className="btn btn-primary"
+                onClick={() => setVisibleCount(prev => prev + 6)}
+              >
+                <span>Show More</span>
+              </button>
+            </div>
+          )}
+        </>
       ) : (
         <div className="no-services-box text-center glass-card">
           <h3>No Products Found</h3>

@@ -14,6 +14,7 @@ const Services = () => {
   const [loading, setLoading] = useState(true);
   const [searchParams] = useSearchParams();
   
+  const [visibleCount, setVisibleCount] = useState(6);
   const searchQuery = searchParams.get('search') || '';
 
   useEffect(() => {
@@ -68,6 +69,7 @@ const Services = () => {
     }
 
     setFilteredItems(filtered);
+    setVisibleCount(6);
   }, [services, selectedCategory, searchQuery, sortBy]);
 
   return (
@@ -121,11 +123,24 @@ const Services = () => {
           <div className="spinner"></div>
         </div>
       ) : filteredItems.length > 0 ? (
-        <div className="services-grid">
-          {filteredItems.map((item) => (
-            <ServiceCard key={item.id} service={item} />
-          ))}
-        </div>
+        <>
+          <div className="services-grid">
+            {filteredItems.slice(0, visibleCount).map((item) => (
+              <ServiceCard key={item.id} service={item} />
+            ))}
+          </div>
+          {filteredItems.length > visibleCount && (
+            <div className="text-center" style={{ marginTop: '30px', marginBottom: '50px' }}>
+              <button 
+                type="button" 
+                className="btn btn-primary"
+                onClick={() => setVisibleCount(prev => prev + 6)}
+              >
+                <span>Show More</span>
+              </button>
+            </div>
+          )}
+        </>
       ) : (
         <div className="no-services-box text-center glass-card">
           <h3>No Services Found</h3>

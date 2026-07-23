@@ -11,25 +11,30 @@ const Home = () => {
   const { settings } = useSettings();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  // Compile active hero images from settings
+  // Compile active hero images from settings or defaults
   const images = [];
   if (settings.heroImageBase64) images.push(settings.heroImageBase64);
   if (settings.heroImage2) images.push(settings.heroImage2);
   if (settings.heroImage3) images.push(settings.heroImage3);
 
-  // Fallback default image if none uploaded
+  // Default 3 high-res fallback images if no images uploaded by admin
   if (images.length === 0) {
-    images.push('https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=1920&auto=format&fit=crop');
+    images.push(
+      'https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=1920&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?q=80&w=1920&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?q=80&w=1920&auto=format&fit=crop'
+    );
   }
 
-  const isCarousel = settings.heroMode === 'carousel' && images.length > 1;
+  // Active carousel if heroMode is carousel OR multiple images exist
+  const isCarousel = settings.heroMode === 'carousel' || images.length > 1;
 
   useEffect(() => {
-    if (!isCarousel) return;
+    if (!isCarousel || images.length <= 1) return;
 
     const interval = setInterval(() => {
       setCurrentImageIndex((prev) => (prev + 1) % images.length);
-    }, 3000); // changes every 3 seconds
+    }, 3000);
 
     return () => clearInterval(interval);
   }, [isCarousel, images.length]);

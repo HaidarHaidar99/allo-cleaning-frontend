@@ -82,8 +82,8 @@ const PublicLayout = () => {
 
   return (
     <div className="public-layout" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-      <OffersBanner />
       <Navbar />
+      <OffersBanner />
       <div className="main-content" style={{ flexGrow: 1 }}>
         <Outlet />
       </div>
