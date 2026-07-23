@@ -720,9 +720,9 @@ const ManageSettings = () => {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', marginBottom: '20px' }}>
                 {formData.offers && formData.offers.length > 0 ? (
                   formData.offers.map((offer, idx) => (
-                    <div key={offer.id || idx} style={{ display: 'flex', gap: '12px', alignItems: 'center', backgroundColor: 'var(--admin-bg)', padding: '15px', borderRadius: '8px', border: '1px solid var(--admin-border)' }}>
-                      <input 
-                        type="text"
+                    <div key={offer.id || idx} style={{ display: 'flex', flexDirection: 'column', gap: '12px', backgroundColor: 'var(--admin-bg)', padding: '18px', borderRadius: '10px', border: '1px solid var(--admin-border)', boxShadow: '0 2px 8px rgba(0,0,0,0.03)' }}>
+                      <textarea 
+                        rows={3}
                         value={offer.text}
                         onChange={(e) => {
                           const updated = [...formData.offers];
@@ -730,51 +730,53 @@ const ManageSettings = () => {
                           setFormData(prev => ({ ...prev, offers: updated }));
                         }}
                         className="form-control"
-                        placeholder="Offer Description (e.g. Get 25% off deep cleaning packages this summer!)"
-                        style={{ flexGrow: 1 }}
+                        placeholder="Special Offer Announcement (e.g., Get 25% off deep cleaning packages this summer! Use code: SUMMER25)"
+                        style={{ width: '100%', resize: 'vertical', minHeight: '80px', fontSize: '0.95rem', lineHeight: '1.5' }}
                         required
                       />
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const updated = [...formData.offers];
-                          updated[idx].active = !updated[idx].active;
-                          setFormData(prev => ({ ...prev, offers: updated }));
-                        }}
-                        style={{
-                          padding: '8px 16px',
-                          borderRadius: '20px',
-                          border: 'none',
-                          cursor: 'pointer',
-                          fontWeight: 'bold',
-                          fontSize: '0.8rem',
-                          backgroundColor: offer.active ? '#10b981' : 'var(--border-color)',
-                          color: offer.active ? '#000000' : 'var(--text-muted)',
-                          minWidth: '90px',
-                          textAlign: 'center'
-                        }}
-                      >
-                        {offer.active ? 'Active' : 'Inactive'}
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const updated = formData.offers.filter((_, i) => i !== idx);
-                          setFormData(prev => ({ ...prev, offers: updated }));
-                        }}
-                        style={{
-                          padding: '8px 16px',
-                          borderRadius: '6px',
-                          border: 'none',
-                          cursor: 'pointer',
-                          backgroundColor: '#fee2e2',
-                          color: '#b91c1c',
-                          fontWeight: 'bold',
-                          fontSize: '0.8rem'
-                        }}
-                      >
-                        Delete
-                      </button>
+                      <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '10px' }}>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const updated = [...formData.offers];
+                            updated[idx].active = !updated[idx].active;
+                            setFormData(prev => ({ ...prev, offers: updated }));
+                          }}
+                          style={{
+                            padding: '8px 18px',
+                            borderRadius: '20px',
+                            border: 'none',
+                            cursor: 'pointer',
+                            fontWeight: 'bold',
+                            fontSize: '0.85rem',
+                            backgroundColor: offer.active ? '#10b981' : 'var(--border-color)',
+                            color: offer.active ? '#ffffff' : 'var(--text-muted)',
+                            minWidth: '95px',
+                            textAlign: 'center'
+                          }}
+                        >
+                          {offer.active ? 'Active' : 'Inactive'}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const updated = formData.offers.filter((_, i) => i !== idx);
+                            setFormData(prev => ({ ...prev, offers: updated }));
+                          }}
+                          style={{
+                            padding: '8px 18px',
+                            borderRadius: '6px',
+                            border: 'none',
+                            cursor: 'pointer',
+                            backgroundColor: '#fee2e2',
+                            color: '#b91c1c',
+                            fontWeight: 'bold',
+                            fontSize: '0.85rem'
+                          }}
+                        >
+                          Delete
+                        </button>
+                      </div>
                     </div>
                   ))
                 ) : (

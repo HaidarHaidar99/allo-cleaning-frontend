@@ -48,18 +48,17 @@ const Navbar = () => {
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      // Navigate to home with search param, then scroll to services
-      if (location.pathname !== '/') {
-        navigate(`/?search=${encodeURIComponent(searchQuery.trim())}`);
-      } else {
-        // Already on home, update URL and scroll to services section
-        navigate(`/?search=${encodeURIComponent(searchQuery.trim())}`, { replace: true });
+      const encoded = encodeURIComponent(searchQuery.trim());
+      // Navigate to home page with search query
+      navigate(`/?search=${encoded}`, { replace: location.pathname === '/' });
+      setShowMobileSearch(false);
+      // Scroll to services section after DOM updates
+      setTimeout(() => {
         const servicesEl = document.getElementById('services-section');
         if (servicesEl) {
-          servicesEl.scrollIntoView({ behavior: 'smooth' });
+          servicesEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
-      }
-      setShowMobileSearch(false);
+      }, 300);
     }
   };
 
